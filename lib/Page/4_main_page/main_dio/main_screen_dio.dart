@@ -80,6 +80,44 @@ Future<List<Map<String, dynamic>>> mainScreenTop12() async {
   }
 }
 
+// 베스트 리뷰
+Future<List<Map<String, dynamic>>> mainScreenBestReviews() async {
+  Dio dio = Dio();
+  var url = '${dotenv.env['API_URL']}/v1/markets/reviews/top';
+  List<Map<String, dynamic>> extractedData = [];
+
+  Map<String, dynamic> data = {
+    'page': 0,
+    'size': 3,
+    'sort': ['writeDate,desc'] // 수정된 정렬 파라미터
+  };
+
+  try {
+    var serverResult = await dio.get(url, queryParameters: data);
+
+    if (serverResult.statusCode == 200) {
+      List<dynamic> reviewsData = serverResult.data;
+      for (var reviewsData in reviewsData) {
+        // 변수 이름 변경
+        Map<String, dynamic> reviewMap = {
+          'market0': reviewsData['writeDate'], // 글 쓴 시간
+          'market1': reviewsData['reviewContent'], // 리뷰 내용
+          'market2': reviewsData['images'][0]['image'], // 리뷰 이미지
+          'market3': reviewsData['reviewerEmail'], // 리뷰 작성자
+          'market4': reviewsData['recommendCount'], // 리뷰 추천수
+        };
+        extractedData.add(reviewMap);
+      }
+
+      return extractedData;
+    } else {
+      return [];
+    }
+  } catch (e) {
+    print('Error: $e');
+    return [];
+  }
+}
 
 //메인화면 관광 명소
 Future<List<Map<String, dynamic>>> mainScreenTourism() async {
