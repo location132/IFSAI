@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -53,7 +54,9 @@ class _StartMaintenanceNoticeState extends State<StartMaintenanceNotice> {
                 ),
                 const SizedBox(height: 15),
                 ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () {
+                    exit(0);
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xff6fbf8a), // 버튼 배경색
                     shape: RoundedRectangleBorder(

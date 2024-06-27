@@ -13,6 +13,7 @@ import 'package:my_dream/Page/4_main_page/4.3_main_category.dart';
 import 'package:my_dream/Page/4_main_page/4.4_main_top12.dart';
 import 'package:my_dream/Page/6_search_results_page/6_search_results_screen.dart';
 import 'package:my_dream/coreService/provider.dart';
+import 'package:my_dream/coreService/start_service_maintenance_notice.dart';
 import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
@@ -37,6 +38,22 @@ class _MainScreenState extends State<MainScreen> {
 // ---------
 
   OverlayEntry? _overlayEntry;
+
+  void serverConnection() async {
+    bool result = await connectionServer();
+
+    if (result) {
+      print('다이아로그 실행');
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        barrierColor: Colors.black.withOpacity(0.5),
+        builder: (BuildContext context) {
+          return const StartMaintenanceNotice();
+        },
+      );
+    }
+  }
 
   void _scrollListener() {
     final searchModelStatus =
@@ -65,6 +82,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+    serverConnection();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollController.addListener(_scrollListener);
     });

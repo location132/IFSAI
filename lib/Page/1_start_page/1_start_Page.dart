@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_dream/Page/1_start_page/1.1_start_service_maintenance_notice.dart';
+import 'package:my_dream/coreService/login_dio.dart';
+import 'package:my_dream/coreService/start_service_maintenance_notice.dart';
 
 class StartPage extends StatefulWidget {
   const StartPage({super.key});
@@ -9,10 +10,25 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPageState extends State<StartPage> {
+  @override
+  void initState() {
+    super.initState();
+    serverConnection();
+  }
+
+  void serverConnection() async {
+    bool result = await connectionServer();
+
+    if (!result) {
+      print('다이아로그 실행');
+      handleLoginResult();
+    }
+  }
+
   void handleLoginResult() {
     showDialog(
       context: context,
-      barrierDismissible: true,
+      barrierDismissible: false,
       barrierColor: Colors.black.withOpacity(0.5),
       builder: (BuildContext context) {
         return const StartMaintenanceNotice();

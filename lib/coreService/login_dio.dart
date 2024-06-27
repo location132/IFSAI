@@ -131,7 +131,7 @@ Future<Map<dynamic, String>> emailCode(
   var url = '${dotenv.env['API_URL']}/v1/accounts/certs/students/code-check';
 
   Map<String, dynamic> data = {
-    "schoolEmail": userEmail,
+    "email": userEmail,
     "code": authenticationCode,
   };
 
@@ -282,5 +282,23 @@ Future<Map<String, dynamic>> patchRoleSendSever() async {
   } catch (e) {
     print(e);
     return {'status': 'is Sever Error'};
+  }
+}
+
+Future<bool> connectionServer() async {
+  Dio dio = Dio();
+
+  var uri = '${dotenv.env['API_URL']}/v1/security/is-connect';
+
+  try {
+    var respons = await dio.get(uri);
+
+    if (respons.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    return false;
   }
 }
