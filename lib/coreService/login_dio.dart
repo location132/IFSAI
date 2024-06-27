@@ -56,7 +56,9 @@ Future<bool> changeSNSLogin(String targetEmail) async {
       return false;
     }
   } catch (e) {
+
     if (e is DioError) {
+
       var errorCode = {e.response?.data}.toString();
       print(errorCode);
     }
@@ -103,7 +105,9 @@ Future<Map<String, dynamic>> sendStudentEmail(String email) async {
     }
   } catch (e) {
     print(e);
+
     if (e is DioError) {
+
       var errorCode = {e.response?.data}.toString();
       print(errorCode);
       if (errorCode.contains('네이버')) {
@@ -151,7 +155,9 @@ Future<Map<dynamic, String>> emailCode(
       return {'status': 'false'};
     }
   } catch (e) {
+
     if (e is DioError) {
+
       var errorCode = {e.response?.data}.toString();
       print(errorCode);
       if (errorCode.contains('errorCode: -5')) {

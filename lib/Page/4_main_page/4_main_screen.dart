@@ -4,7 +4,6 @@ import 'package:my_dream/coreService/login_dio.dart';
 import 'package:my_dream/Page/4_main_page/4.5_main_new_store.dart';
 import 'package:my_dream/Page/4_main_page/4.6_main_best_review.dart';
 import 'package:my_dream/Page/4_main_page/4.7_main_hot_promotion.dart';
-import 'package:my_dream/Page/4_main_page/4.8_main_featured_stores.dart';
 import 'package:my_dream/Page/4_main_page/4.9_main_tourist_attractions.dart';
 import 'package:my_dream/Page/5_search_page/5.1.1_searcscreen.dart';
 import 'package:my_dream/Page/4_main_page/4.1_main_logo_searchbar.dart';
@@ -42,7 +41,7 @@ class _MainScreenState extends State<MainScreen> {
   void serverConnection() async {
     bool result = await connectionServer();
 
-    if (result) {
+    if (!result && mounted) {
       print('다이아로그 실행');
       showDialog(
         context: context,
@@ -281,7 +280,6 @@ class _MainScreenState extends State<MainScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 40),
-                                const MainFeaturedStores(),
                                 const SizedBox(
                                   height: 70,
                                 ),

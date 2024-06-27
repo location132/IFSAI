@@ -80,18 +80,41 @@ Future<List<Map<String, dynamic>>> mainScreenTop12() async {
   }
 }
 
-// 메인화면 관광 명소
-// Future<List<Map<String, dynamic>>> mainScreenTourism() async {
-//   Dio dio = Dio();
-//   var url = '${dotenv.env['API_URL']}/v1/attractions';
 
-//   Map<String, dynamic> data = {
-//     'page' : 0
-//   };
+//메인화면 관광 명소
+Future<List<Map<String, dynamic>>> mainScreenTourism() async {
+  Dio dio = Dio();
+  var url = '${dotenv.env['API_URL']}/v1/attractions';
+  List<Map<String, dynamic>> extractedData = [];
 
-//   try {
-//     var serverResult = await dio.get(
-//       url,
-//     );
-//   } catch (e) {}
-// }
+  Map<String, dynamic> data = {
+    'page': 0,
+    'size': 4,
+    'sort': ['String']
+  };
+
+  try {
+    var serverResult = await dio.get(url, queryParameters: data);
+
+    if (serverResult.statusCode == 200) {
+      List<dynamic> place = serverResult.data;
+
+      for (var place in place) {
+        Map<String, dynamic> data = {
+          'market0': place['imageUrl'],
+          'market1': place['tags'],
+          'market2': place['description']
+        };
+
+        extractedData.add(data);
+      }
+
+      return extractedData;
+    } else {
+      return [];
+    }
+  } catch (e) {
+    print(e);
+    return [];
+  }
+}
