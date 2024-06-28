@@ -4,7 +4,9 @@ import 'package:my_dream/Page/4_main_page/4.9.1_main_tourist_container.dart';
 import 'package:my_dream/Page/4_main_page/main_dio/main_screen_dio.dart';
 
 class MainTouristAttractions extends StatefulWidget {
-  const MainTouristAttractions({super.key});
+  final VoidCallback onLoadingComplete;
+
+  const MainTouristAttractions({super.key, required this.onLoadingComplete});
 
   @override
   State<MainTouristAttractions> createState() => _MainTouristAttractionsState();
@@ -24,6 +26,7 @@ class _MainTouristAttractionsState extends State<MainTouristAttractions> {
   void attractionsGetDio() async {
     serverResult = await mainScreenTourism();
     _isFinish = true;
+    widget.onLoadingComplete();
     setState(() {});
   }
 

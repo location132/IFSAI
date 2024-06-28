@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:my_dream/Page/4_main_page/4.10_main_quest.dart';
+import 'package:my_dream/Page/4_main_page/4.11_main_shimmer.dart';
 import 'package:my_dream/coreService/login_dio.dart';
 import 'package:my_dream/Page/4_main_page/4.5_main_new_store.dart';
 import 'package:my_dream/Page/4_main_page/4.6_main_best_review.dart';
@@ -34,6 +36,9 @@ class _MainScreenState extends State<MainScreen> {
   bool _isLogoAni = false; // 로고 (opacity)
   bool _isFirstLogoEntry = true; // 로고 애니메이션 최초 1회 감지
 
+// --------- 쉬머 효과
+  bool _isLoadFinish = false;
+  int _finishCount = 0;
 // ---------
 
   OverlayEntry? _overlayEntry;
@@ -189,6 +194,23 @@ class _MainScreenState extends State<MainScreen> {
     _overlayEntry = null;
   }
 
+  // 쉬머효과 메인 로딩 완료
+  void _isMainLoadingComplete(int finish) async {
+    if (finish == 4) {
+      await Future.delayed(const Duration(seconds: 2));
+      setState(() {
+        _isLoadFinish = true;
+      });
+    }
+  }
+
+  void _incrementFinishCount() {
+    setState(() {
+      _finishCount++;
+      _isMainLoadingComplete(_finishCount);
+    });
+  }
+
   //-----------------------------------------------------------
 
   @override
@@ -205,221 +227,334 @@ class _MainScreenState extends State<MainScreen> {
           child: Center(
             child: Stack(
               children: [
-                Column(
-                  children: [
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 360),
-                      margin: EdgeInsets.only(
-                          top: _isFirstSearchbarEntry
-                              ? screenHeight * 0.125
-                              : _isFirstLogoEntry
-                                  ? screenHeight * 0.04
-                                  : screenHeight * 0.0),
-                      child: const SizedBox(),
-                    ),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        controller: _scrollController,
-                        child: IgnorePointer(
-                          ignoring: searchModelStatus
-                              .isSearchResultsScreen, // 검색 결과 화면이 활성화되면 메인 화면의 입력을 무시
-                          child: AnimatedOpacity(
-                            opacity:
-                                searchModelStatus.isSearchResultsScreen ? 0 : 1,
-                            duration: const Duration(milliseconds: 450),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      left: screenWidth * 0.041,
-                                      right: screenWidth * 0.041),
-                                  child: Column(
-                                    children: [
-                                      Stack(
-                                        children: [
-                                          Column(
+                IgnorePointer(
+                  ignoring: !_isLoadFinish,
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 420),
+                    opacity: _isLoadFinish ? 1.0 : 0.0,
+                    child: Stack(
+                      children: [
+                        Column(
+                          children: [
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 360),
+                              margin: EdgeInsets.only(
+                                  top: _isFirstSearchbarEntry
+                                      ? screenHeight * 0.125
+                                      : _isFirstLogoEntry
+                                          ? screenHeight * 0.04
+                                          : screenHeight * 0.0),
+                              child: const SizedBox(),
+                            ),
+                            Expanded(
+                              child: SingleChildScrollView(
+                                controller: _scrollController,
+                                child: IgnorePointer(
+                                  ignoring: searchModelStatus
+                                      .isSearchResultsScreen, // 검색 결과 화면이 활성화되면 메인 화면의 입력을 무시
+                                  child: AnimatedOpacity(
+                                    opacity:
+                                        searchModelStatus.isSearchResultsScreen
+                                            ? 0
+                                            : 1,
+                                    duration: const Duration(milliseconds: 450),
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              left: screenWidth * 0.041,
+                                              right: screenWidth * 0.041),
+                                          child: Column(
                                             children: [
-                                              const MainAddBannerScreen(),
-                                              SizedBox(
-                                                  height:
-                                                      screenHeight * 0.0235),
-                                              const MainCategory(),
+                                              Stack(
+                                                children: [
+                                                  Column(
+                                                    children: [
+                                                      const MainAddBannerScreen(),
+                                                      SizedBox(
+                                                          height: screenHeight *
+                                                              0.0235),
+                                                      const MainCategory(),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
                                             ],
                                           ),
-                                        ],
-                                      ),
-                                    ],
+                                        ),
+                                        SizedBox(height: screenHeight * 0.0352),
+                                        MainNewStore(
+                                          onLoadingComplete:
+                                              _incrementFinishCount,
+                                        ),
+                                        const SizedBox(height: 25),
+                                        MainTop12(
+                                          onLoadingComplete:
+                                              _incrementFinishCount,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              left: screenWidth * 0.041,
+                                              right: screenWidth * 0.041),
+                                          child: Column(
+                                            children: [
+                                              SizedBox(
+                                                  height:
+                                                      screenHeight * 0.0352),
+                                              const MainHotPromotion(),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(height: 40),
+                                        MainBestReview(
+                                          onLoadingComplete:
+                                              _incrementFinishCount,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              left: screenWidth * 0.041,
+                                              right: screenWidth * 0.041),
+                                          child: Column(
+                                            children: [
+                                              SizedBox(
+                                                  height:
+                                                      screenHeight * 0.0352),
+                                              MainTouristAttractions(
+                                                onLoadingComplete:
+                                                    _incrementFinishCount,
+                                              ),
+                                              const SizedBox(height: 40),
+                                              const MainQuest(),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 170,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                                SizedBox(height: screenHeight * 0.0352),
-                                const MainNewStore(),
-                                const SizedBox(height: 25),
-                                const MainTop12(),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      left: screenWidth * 0.041,
-                                      right: screenWidth * 0.041),
-                                  child: Column(
-                                    children: [
-                                      SizedBox(height: screenHeight * 0.0352),
-                                      const MainHotPromotion(),
-                                    ],
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        // 검색 결과 화면으로 전환
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          child: IgnorePointer(
+                            ignoring: !searchModelStatus
+                                .isSearchResultsScreen, // 검색 결과 화면이 활성화되면 메인 화면의 입력을 무시
+                            child: AnimatedOpacity(
+                              opacity: searchModelStatus.isSearchResultsScreen
+                                  ? 1
+                                  : 0,
+                              duration: const Duration(milliseconds: 450),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        top: _isFirstSearchbarEntry
+                                            ? screenHeight * 0.125
+                                            : _isFirstLogoEntry
+                                                ? screenHeight * 0.04
+                                                : screenHeight * 0.0),
+                                    child: const SizedBox(),
                                   ),
-                                ),
-                                const SizedBox(height: 40),
-                                const MainBestReview(),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      left: screenWidth * 0.041,
-                                      right: screenWidth * 0.041),
-                                  child: Column(
-                                    children: [
-                                      SizedBox(height: screenHeight * 0.0352),
-                                      const MainTouristAttractions(),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(height: 40),
-                                const SizedBox(
-                                  height: 70,
-                                ),
-                              ],
+                                  const SearchResultsScreen(),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                  ],
-                ),
 
-                // 검색 결과 화면으로 전환
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: IgnorePointer(
-                    ignoring: !searchModelStatus
-                        .isSearchResultsScreen, // 검색 결과 화면이 활성화되면 메인 화면의 입력을 무시
-                    child: AnimatedOpacity(
-                      opacity: searchModelStatus.isSearchResultsScreen ? 1 : 0,
-                      duration: const Duration(milliseconds: 450),
-                      child: Column(
-                        children: [
-                          Padding(
+                        // 로고와 검색창 시작
+                        Positioned(
+                          top: -20,
+                          child: Padding(
                             padding: EdgeInsets.only(
-                                top: _isFirstSearchbarEntry
-                                    ? screenHeight * 0.125
-                                    : _isFirstLogoEntry
-                                        ? screenHeight * 0.04
-                                        : screenHeight * 0.0),
-                            child: const SizedBox(),
-                          ),
-                          const SearchResultsScreen(),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-
-                // 로고와 검색창 시작
-                Positioned(
-                  top: -20,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        left: screenWidth * 0.041, right: screenWidth * 0.041),
-                    child: Column(
-                      children: [
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 360),
-                          margin: EdgeInsets.only(top: _isLogoMove ? 0 : 20),
-                          child: AnimatedOpacity(
-                            duration: const Duration(milliseconds: 210),
-                            opacity: _isLogoAni ? 0.0 : 1.0,
-                            child: Row(
+                                left: screenWidth * 0.041,
+                                right: screenWidth * 0.041),
+                            child: Column(
                               children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(top: 10, left: 5),
+                                AnimatedContainer(
+                                  duration: const Duration(milliseconds: 360),
+                                  margin: EdgeInsets.only(
+                                      top: _isLogoMove ? 0 : 20),
                                   child: AnimatedOpacity(
-                                    opacity: searchModelStatus.isSearchScreen ||
-                                            searchModelStatus
-                                                .isSearchResultsScreen
-                                        ? 1
-                                        : 0,
                                     duration: const Duration(milliseconds: 210),
-                                    child: IgnorePointer(
-                                      ignoring:
-                                          !(searchModelStatus.isSearchScreen ||
-                                              searchModelStatus
-                                                  .isSearchResultsScreen),
-                                      child: SizedBox(
-                                        height: 24,
-                                        width: 24,
-                                        child: IconButton(
-                                          icon: const Icon(
-                                              Icons.arrow_back_ios_rounded,
-                                              size: 24),
-                                          onPressed: () {
-                                            _isIconButton();
-                                          },
-                                          style: TextButton.styleFrom(
+                                    opacity: _isLogoAni ? 0.0 : 1.0,
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 10, left: 5),
+                                          child: AnimatedOpacity(
+                                            opacity: searchModelStatus
+                                                        .isSearchScreen ||
+                                                    searchModelStatus
+                                                        .isSearchResultsScreen
+                                                ? 1
+                                                : 0,
+                                            duration: const Duration(
+                                                milliseconds: 210),
+                                            child: IgnorePointer(
+                                              ignoring: !(searchModelStatus
+                                                      .isSearchScreen ||
+                                                  searchModelStatus
+                                                      .isSearchResultsScreen),
+                                              child: SizedBox(
+                                                height: 24,
+                                                width: 24,
+                                                child: IconButton(
+                                                  icon: const Icon(
+                                                      Icons
+                                                          .arrow_back_ios_rounded,
+                                                      size: 24),
+                                                  onPressed: () {
+                                                    _isIconButton();
+                                                  },
+                                                  style: TextButton.styleFrom(
+                                                    splashFactory:
+                                                        NoSplash.splashFactory,
+                                                  ),
+                                                  padding: EdgeInsets.zero,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: screenWidth * 0.295),
+                                        IgnorePointer(
+                                          ignoring: _isLogoAni,
+                                          child: InkWell(
                                             splashFactory:
                                                 NoSplash.splashFactory,
+                                            highlightColor: Colors.transparent,
+                                            onTap: () {
+                                              searchModelStatus
+                                                  .setSearchResultsScreen(
+                                                      false);
+                                            },
+                                            child: Center(
+                                              child: SizedBox(
+                                                height: 25,
+                                                width: 70,
+                                                child: Image.asset(
+                                                  'assets/images/ifSaiLogo.png',
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                          padding: EdgeInsets.zero,
                                         ),
-                                      ),
+                                      ],
                                     ),
                                   ),
-                                ),
-                                SizedBox(width: screenWidth * 0.3 - 2),
-                                IgnorePointer(
-                                  ignoring: _isLogoAni,
-                                  child: InkWell(
-                                    splashFactory: NoSplash.splashFactory,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () {
-                                      searchModelStatus
-                                          .setSearchResultsScreen(false);
-                                    },
-                                    child: SizedBox(
-                                      height: 25,
-                                      width: 70,
-                                      child: Image.asset(
-                                        'assets/images/ifSaiLogo.png',
-                                      ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        ////------------------------
+                        Positioned(
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                left: screenWidth * 0.041,
+                                right: screenWidth * 0.041),
+                            child: Column(
+                              children: [
+                                SizedBox(height: screenHeight * 0.035),
+                                AnimatedContainer(
+                                  duration: const Duration(milliseconds: 210),
+                                  margin: EdgeInsets.only(
+                                      top: _isSearchBarMove ? 0 : 20),
+                                  child: AnimatedOpacity(
+                                    duration: const Duration(milliseconds: 210),
+                                    opacity: _isSearchBarAni ? 0.0 : 1.0,
+                                    child: IgnorePointer(
+                                      ignoring: _isSearchBarAni,
+                                      child: MainSearchBarScreen(
+                                          searchScreen: toggleSearchScreen),
                                     ),
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
+                        ),
+                        //-------------------------
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          child: IgnorePointer(
+                            ignoring: searchModelStatus
+                                .isSearchResultsScreen, // 검색 결과 화면이 활성화되면 메인 화면의 입력을 무시
+                            child: AnimatedOpacity(
+                              opacity: searchModelStatus.isSearchResultsScreen
+                                  ? 0
+                                  : 1,
+                              duration: const Duration(milliseconds: 450),
+                              child: SizedBox(
+                                height: 56, //screenHeight * 0.066,
+                                width: double.infinity,
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Color(0x0C000000),
+                                        blurRadius: 8,
+                                        offset: Offset(0, -2),
+                                        spreadRadius: 0,
+                                      )
+                                    ],
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      const Spacer(),
+                                      const Icon(
+                                        Icons.home_filled,
+                                        size: 32,
+                                        color: Color(0xff6fbf8a),
+                                      ),
+                                      const Spacer(),
+                                      const Icon(
+                                        Icons.location_on_rounded,
+                                        size: 32,
+                                        color: Color(0xffc1c1c1),
+                                      ),
+                                      const Spacer(),
+                                      const Icon(
+                                        Icons.add_box_outlined,
+                                        size: 32,
+                                        color: Color(0xffc1c1c1),
+                                      ),
+                                      const Spacer(),
+                                      InkWell(
+                                        onTap: () {
+                                          print('로그아웃 임시');
+                                          ifsaiLogout();
 
-                ////------------------------
-                Positioned(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        left: screenWidth * 0.041, right: screenWidth * 0.041),
-                    child: Column(
-                      children: [
-                        SizedBox(height: screenHeight * 0.035),
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 210),
-                          margin:
-                              EdgeInsets.only(top: _isSearchBarMove ? 0 : 20),
-                          child: AnimatedOpacity(
-                            duration: const Duration(milliseconds: 210),
-                            opacity: _isSearchBarAni ? 0.0 : 1.0,
-                            child: IgnorePointer(
-                              ignoring: _isSearchBarAni,
-                              child: MainSearchBarScreen(
-                                  searchScreen: toggleSearchScreen),
+                                          Navigator.pushNamed(
+                                              context, '/StartPage');
+                                        },
+                                        child: const Icon(
+                                          Icons.person_outline,
+                                          size: 32,
+                                          color: Color(0xffc1c1c1),
+                                        ),
+                                      ),
+                                      const Spacer(),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -427,73 +562,12 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                   ),
                 ),
-                //-------------------------
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: IgnorePointer(
-                    ignoring: searchModelStatus
-                        .isSearchResultsScreen, // 검색 결과 화면이 활성화되면 메인 화면의 입력을 무시
-                    child: AnimatedOpacity(
-                      opacity: searchModelStatus.isSearchResultsScreen ? 0 : 1,
-                      duration: const Duration(milliseconds: 450),
-                      child: SizedBox(
-                        height: 56, //screenHeight * 0.066,
-                        width: double.infinity,
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(0x0C000000),
-                                blurRadius: 8,
-                                offset: Offset(0, -2),
-                                spreadRadius: 0,
-                              )
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              const Spacer(),
-                              const Icon(
-                                Icons.home_filled,
-                                size: 32,
-                                color: Color(0xff6fbf8a),
-                              ),
-                              const Spacer(),
-                              const Icon(
-                                Icons.location_on_rounded,
-                                size: 32,
-                                color: Color(0xffc1c1c1),
-                              ),
-                              const Spacer(),
-                              const Icon(
-                                Icons.add_box_outlined,
-                                size: 32,
-                                color: Color(0xffc1c1c1),
-                              ),
-                              const Spacer(),
-                              InkWell(
-                                onTap: () {
-                                  print('로그아웃 임시');
-                                  ifsaiLogout();
-
-                                  Navigator.pushNamed(context, '/StartPage');
-                                },
-                                child: const Icon(
-                                  Icons.person_outline,
-                                  size: 32,
-                                  color: Color(0xffc1c1c1),
-                                ),
-                              ),
-                              const Spacer(),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                IgnorePointer(
+                  ignoring: _isLoadFinish,
+                  child: AnimatedOpacity(
+                      duration: const Duration(milliseconds: 420),
+                      opacity: !_isLoadFinish ? 1.0 : 0.0,
+                      child: const MainShimmer()),
                 ),
               ],
             ),

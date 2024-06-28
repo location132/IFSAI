@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:my_dream/Page/4_main_page/main_dio/main_screen_dio.dart';
 
 class MainNewStore extends StatefulWidget {
-  const MainNewStore({super.key});
+  final VoidCallback onLoadingComplete;
+
+  const MainNewStore({super.key, required this.onLoadingComplete});
 
   @override
   State<MainNewStore> createState() => _MainNewStoreState();
@@ -20,6 +22,7 @@ class _MainNewStoreState extends State<MainNewStore> {
 
   void newStoreGetDio() async {
     severResult = await mainScreenNewStore();
+    widget.onLoadingComplete();
     setState(() {
       storCount = severResult.length;
     });

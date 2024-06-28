@@ -19,16 +19,18 @@ class _MainAddBannerScreenState extends State<MainAddBannerScreen> {
           height: screenWidth * 0.357,
           width: double.infinity,
           child: Container(
-              decoration: BoxDecoration(
-                color: const Color(0xffdbdbdb),
-                borderRadius: BorderRadius.circular(8),
+            decoration: BoxDecoration(
+              color: const Color(0xffdbdbdb),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.network(
+                '${dotenv.env['API_URL']}/images/banner.png',
+                fit: BoxFit.cover,
               ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                    '${dotenv.env['API_URL']}/images/banner.png',
-                    fit: BoxFit.cover),
-              )),
+            ),
+          ),
         )
       ],
     );

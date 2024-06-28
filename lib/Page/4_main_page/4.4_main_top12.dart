@@ -4,7 +4,9 @@ import 'package:my_dream/Page/4_main_page/main_dio/main_screen_dio.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class MainTop12 extends StatefulWidget {
-  const MainTop12({super.key});
+  final VoidCallback onLoadingComplete;
+
+  const MainTop12({super.key, required this.onLoadingComplete});
 
   @override
   State<MainTop12> createState() => _MainTop12State();
@@ -29,6 +31,10 @@ class _MainTop12State extends State<MainTop12> {
     serverResult = await mainScreenTop12();
 
     _isFinish = dataProcessing();
+    if (_isFinish == true) {
+      widget.onLoadingComplete();
+    }
+
     setState(() {});
   }
 
