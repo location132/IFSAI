@@ -27,18 +27,18 @@ class _BuildAttractionCardState extends State<BuildAttractionCard> {
             borderRadius: BorderRadius.circular(8),
             child: Stack(
               children: [
-                Image.network(widget.serverResultData['market0'].toString()),
+                //Image.network(widget.serverResultData['market0'].toString()),
                 Positioned(
                   child: Container(
                     height: screenHeight * 0.282,
                     width: screenWidth * 0.44,
                     decoration: ShapeDecoration(
                       gradient: LinearGradient(
-                        begin: const Alignment(0.00, 1.00),
-                        end: const Alignment(0, 0),
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
                         colors: [
-                          Colors.black.withOpacity(0.500000011920929),
-                          Colors.black.withOpacity(0.04)
+                          Colors.black.withOpacity(0.85555555),
+                          Colors.black.withOpacity(0.005)
                         ],
                       ),
                       shape: RoundedRectangleBorder(
