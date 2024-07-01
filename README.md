@@ -3,9 +3,6 @@
 <br />
 
 
-<img src="https://github.com/location132/IFSAI/assets/132702102/ab4a1dcf-468c-434f-8197-9d32cd519ce2" width="20" alt="Project Image"> <a href="https://www.figma.com/design/8gDYtHK41c2CYetQAYh1v0/잎사이?node-id=0-1&t=PZcXK9YipDUtbpvK-0"><strong>피그마 바로가기 (Web)</strong></a> 
-<br />
- <img src="https://github.com/location132/IFSAI/assets/132702102/81fbb182-9ce0-4881-b81c-d3b47c1feeb0" width="20" alt="Project Image"> <a href="https://intriguing-cowl-e9d.notion.site/Flutter-cf9046ed0d9c4bc48db0e3e0d4110567?pvs=4"><strong>노션 바로가기 (Web)</strong></a>
 
 <br />
 
@@ -14,6 +11,13 @@
 이 프로젝트를 통해 제가 공부하고 경험했던 Flutter의 상태관리와 생명주기 다음으로 사용자 친화적인 UX디자인과<br />
 마지막으로 각종 Rive 애니메이션 등, 다양한 기술을 적용하고 실험했습니다.<br /><br />
 잎사이는 오는 2월에 건국대학교 글로컬캠퍼스 학생들에게 배포될 예정으로<br />실제 시장에서의 반응을 통해 더 성장하는 계기가 될 수 있는 저의 핵심 프로젝트 입니다.
+<br />
+<br />
+
+<img src="https://github.com/location132/IFSAI/assets/132702102/ab4a1dcf-468c-434f-8197-9d32cd519ce2" width="20" alt="Project Image"> <a href="https://www.figma.com/design/8gDYtHK41c2CYetQAYh1v0/잎사이?node-id=0-1&t=PZcXK9YipDUtbpvK-0"><strong>피그마 바로가기 (Web)</strong></a> 
+<br />
+ <img src="https://github.com/location132/IFSAI/assets/132702102/81fbb182-9ce0-4881-b81c-d3b47c1feeb0" width="20" alt="Project Image"> <a href="https://intriguing-cowl-e9d.notion.site/Flutter-cf9046ed0d9c4bc48db0e3e0d4110567?pvs=4"><strong>노션 바로가기 (Web)</strong></a>
+
 
 <br />
 
