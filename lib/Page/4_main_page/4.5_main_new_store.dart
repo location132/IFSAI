@@ -164,10 +164,10 @@ class _MainNewStoreState extends State<MainNewStore> {
         Padding(
           padding: EdgeInsets.only(
               left: screenWidth * 0.041, right: screenWidth * 0.041),
-          child: const Row(
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(
+              const Text(
                 '신규 스토어',
                 style: TextStyle(
                   color: Color(0xff111111),
@@ -176,17 +176,22 @@ class _MainNewStoreState extends State<MainNewStore> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              Spacer(),
-              Text(
-                '전체보기',
-                style: TextStyle(
-                  color: Color(0xff8e8e8e),
-                  fontSize: 12,
-                  fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.w500,
+              const Spacer(),
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, '/DetailNewStore');
+                },
+                child: const Text(
+                  '전체보기',
+                  style: TextStyle(
+                    color: Color(0xff8e8e8e),
+                    fontSize: 12,
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
-              Icon(
+              const Icon(
                 Icons.keyboard_arrow_right,
                 color: Color(0xff8e8e8e),
                 size: 16,
