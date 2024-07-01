@@ -46,6 +46,17 @@
 
 <br />
 
+## 📌 특이사항
+
+![image](https://github.com/location132/IFSAI/assets/132702102/55e079e8-3a04-4920-9289-eabda4addb4a)
+- dotENV 파일 관리
+- 상태관리, 생명주기, 애니메이션, API연결 등
+- 커뮤니케이션 오류 없이 협업기
+
+
+
+<br />
+
 ## 📁 아키텍쳐
 
 ```
