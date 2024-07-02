@@ -31,6 +31,21 @@ class _MainQuestState extends State<MainQuest> {
               ),
               textAlign: TextAlign.left,
             ),
+            Spacer(),
+            Text(
+              '전체보기',
+              style: TextStyle(
+                color: Color(0xff8e8e8e),
+                fontSize: 12,
+                fontFamily: 'Pretendard',
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Icon(
+              Icons.keyboard_arrow_right,
+              color: Color(0xff8e8e8e),
+              size: 16,
+            )
           ],
         ),
         const SizedBox(height: 10),
@@ -88,7 +103,7 @@ class _MainQuestState extends State<MainQuest> {
                   ),
                 ),
               ),
-              const SizedBox(height: 3),
+              const SizedBox(height: 5),
               Padding(
                 padding: const EdgeInsets.only(left: 20),
                 child: Row(
@@ -113,14 +128,14 @@ class _MainQuestState extends State<MainQuest> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16.5,
               ),
-              Divider(
+              const Divider(
                 height: 1,
                 color: Color(0xfff5f5f5),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 18.5,
               ),
               Padding(
@@ -160,7 +175,7 @@ class _MainQuestState extends State<MainQuest> {
                   ),
                 ),
               ),
-              const SizedBox(height: 3),
+              const SizedBox(height: 5),
               Padding(
                 padding: const EdgeInsets.only(left: 20),
                 child: Row(
@@ -185,14 +200,14 @@ class _MainQuestState extends State<MainQuest> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16.5,
               ),
-              Divider(
+              const Divider(
                 height: 1,
                 color: Color(0xfff5f5f5),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 18.5,
               ),
               Padding(
@@ -232,7 +247,7 @@ class _MainQuestState extends State<MainQuest> {
                   ),
                 ),
               ),
-              const SizedBox(height: 3),
+              const SizedBox(height: 5),
               Padding(
                 padding: const EdgeInsets.only(left: 20),
                 child: Row(
@@ -257,7 +272,7 @@ class _MainQuestState extends State<MainQuest> {
                   ],
                 ),
               ),
-              SizedBox(height: 18),
+              const SizedBox(height: 18),
             ],
           ),
         ),
