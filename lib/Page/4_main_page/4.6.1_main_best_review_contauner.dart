@@ -60,7 +60,8 @@ class _BestReview3State extends State<BestReview3> {
           child: SizedBox(
             width: screenWidth * 0.331,
             height: double.infinity,
-            child: Image.network(widget.reviewsData['market2']),
+            child: Image.network(
+                fit: BoxFit.fitHeight, widget.reviewsData['market2']),
           ),
         ),
         Expanded(
@@ -121,7 +122,7 @@ class _BestReview3State extends State<BestReview3> {
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      color: Color(0xff5b5b5b),
+                      color: Colors.black,
                       fontSize: 12,
                       fontFamily: 'Pretendard',
                     ),

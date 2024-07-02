@@ -125,7 +125,7 @@ class _MainNewStoreState extends State<MainNewStore> {
                 ],
               ),
               Positioned(
-                top: 10,
+                top: 12,
                 child: Container(
                   height: 18,
                   decoration: const BoxDecoration(
@@ -138,7 +138,7 @@ class _MainNewStoreState extends State<MainNewStore> {
                         'NEW',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 8,
+                          fontSize: 10,
                           fontFamily: 'Pretendard',
                           fontWeight: FontWeight.w600,
                         ),

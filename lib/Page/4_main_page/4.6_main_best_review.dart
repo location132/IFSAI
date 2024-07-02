@@ -82,8 +82,14 @@ class _MainBestReviewState extends State<MainBestReview> {
                     children: [
                       // 첫 번째 컨테이너에 패딩 추가
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 5, vertical: 10),
+                        padding: EdgeInsets.only(
+                            left: screenWidth * 0.032,
+                            right: screenWidth * 0.032,
+                            top: 10,
+                            bottom: 10),
+                        //const EdgeInsets.symmetric(
+                        //     horizontal: 5, vertical: 10),
+
                         child: Container(
                           decoration: ShapeDecoration(
                             color: Colors.white,
@@ -104,8 +110,11 @@ class _MainBestReviewState extends State<MainBestReview> {
                       ),
                       // 두 번째 컨테이너에 패딩 추가 (동일한 설정)
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 5, vertical: 10),
+                        padding: EdgeInsets.only(
+                            left: screenWidth * 0.032,
+                            right: screenWidth * 0.032,
+                            top: 10,
+                            bottom: 10),
                         child: Container(
                           decoration: ShapeDecoration(
                             color: Colors.white,
@@ -126,8 +135,11 @@ class _MainBestReviewState extends State<MainBestReview> {
                       ),
                       // 세 번째 컨테이너에 패딩 추가 (동일한 설정)
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 5, vertical: 10),
+                        padding: EdgeInsets.only(
+                            left: screenWidth * 0.032,
+                            right: screenWidth * 0.032,
+                            top: 10,
+                            bottom: 10),
                         child: Container(
                           decoration: ShapeDecoration(
                             color: Colors.white,

@@ -54,11 +54,11 @@ class _MainTop12State extends State<MainTop12> {
       children: [
         Padding(
           padding: EdgeInsets.only(
-              left: screenWidth * 0.066, right: screenWidth * 0.065),
-          child: const Row(
+              left: screenWidth * 0.055, right: screenWidth * 0.055),
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(
+              const Text(
                 'TOP 12 👑',
                 style: TextStyle(
                   color: Color(0xff111111),
@@ -67,17 +67,22 @@ class _MainTop12State extends State<MainTop12> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              Spacer(),
-              Text(
-                '전체보기',
-                style: TextStyle(
-                  color: Color(0xff8e8e8e),
-                  fontSize: 12,
-                  fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.w500,
+              const Spacer(),
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, '/DetailTop12Store');
+                },
+                child: const Text(
+                  '전체보기',
+                  style: TextStyle(
+                    color: Color(0xff8e8e8e),
+                    fontSize: 12,
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
-              Icon(
+              const Icon(
                 Icons.keyboard_arrow_right,
                 color: Color(0xff8e8e8e),
                 size: 16,
@@ -100,8 +105,13 @@ class _MainTop12State extends State<MainTop12> {
                         children: [
 //---------------------
                           Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 10),
+                            padding: EdgeInsets.only(
+                                left: screenWidth * 0.008,
+                                right: screenWidth * 0.008,
+                                top: 10,
+                                bottom: 10),
+                            // const EdgeInsets.symmetric(
+                            //     horizontal: 5, vertical: 10),
                             child: Container(
                               decoration: ShapeDecoration(
                                 color: Colors.white,

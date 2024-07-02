@@ -38,10 +38,12 @@ class _SearchLogicCategoryState extends State<SearchLogicCategory> {
                     )
                   ],
                 ),
-                child: Icon(
-                  Icons.fastfood,
-                  color: const Color(0xff6fbf8a),
-                  size: screenWidth * 0.0765,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Image.asset(
+                    'assets/images/category_image_bugger.png',
+                    scale: 2.9,
+                  ),
                 ),
               ),
             ),
@@ -80,16 +82,18 @@ class _SearchLogicCategoryState extends State<SearchLogicCategory> {
                     )
                   ],
                 ),
-                child: Icon(
-                  Icons.attractions,
-                  color: const Color(0xff6fbf8a),
-                  size: screenWidth * 0.0765,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Image.asset(
+                    'assets/images/category_image_book.png',
+                    scale: 2.9,
+                  ),
                 ),
               ),
             ),
             const SizedBox(height: 10),
             const Text(
-              '문화',
+              '지식',
               style: TextStyle(
                 color: Color(0xFF111111),
                 fontSize: 12,
@@ -122,16 +126,18 @@ class _SearchLogicCategoryState extends State<SearchLogicCategory> {
                     )
                   ],
                 ),
-                child: Icon(
-                  Icons.local_hospital,
-                  color: const Color(0xff6fbf8a),
-                  size: screenWidth * 0.0765,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
+                  child: Image.asset(
+                    'assets/images/category_image_culture.png',
+                    scale: 2.9,
+                  ),
                 ),
               ),
             ),
             const SizedBox(height: 10),
             const Text(
-              '의료',
+              '문화',
               style: TextStyle(
                 color: Color(0xFF111111),
                 fontSize: 12,

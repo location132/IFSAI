@@ -386,7 +386,7 @@ class _DetailNewStoreState extends State<DetailNewStore> {
                             duration: const Duration(milliseconds: 420),
                             opacity: _isFirstScreen ? 1.0 : 0.0,
                             child: IgnorePointer(
-                              ignoring: _isFirstScreen,
+                              ignoring: !_isFirstScreen,
                               child: ListView.builder(
                                 itemCount: originalStore.length,
                                 itemBuilder: (context, index) {
@@ -401,7 +401,7 @@ class _DetailNewStoreState extends State<DetailNewStore> {
                             duration: const Duration(milliseconds: 420),
                             opacity: !_isFirstScreen ? 1.0 : 0.0,
                             child: IgnorePointer(
-                              ignoring: !_isFirstScreen,
+                              ignoring: _isFirstScreen,
                               child: ListView.builder(
                                 itemCount: newStore.length + 1,
                                 itemBuilder: (context, index) {
