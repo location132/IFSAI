@@ -27,7 +27,7 @@ class _BuildAttractionCardState extends State<BuildAttractionCard> {
             borderRadius: BorderRadius.circular(8),
             child: Stack(
               children: [
-                //Image.network(widget.serverResultData['market0'].toString()),
+                Image.network(widget.serverResultData['market0'].toString()),
                 Positioned(
                   child: Container(
                     height: screenHeight * 0.282,

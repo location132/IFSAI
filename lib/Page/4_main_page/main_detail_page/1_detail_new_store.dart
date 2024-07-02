@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_dream/Page/4_main_page/main_dio/main_screen_dio.dart';
+import 'package:my_dream/coreService/Shimmer/newStore_shimmer.dart';
 
 class DetailNewStore extends StatefulWidget {
   const DetailNewStore({super.key});
@@ -9,9 +10,14 @@ class DetailNewStore extends StatefulWidget {
 }
 
 class _DetailNewStoreState extends State<DetailNewStore> {
+  final TextEditingController _textEditingController = TextEditingController();
   List<Map<String, dynamic>> newStore = [];
+  List<Map<String, dynamic>> originalStore = []; // 원래의 스토어 리스트 백업
   String page = '0';
   int storeCount = 0;
+  bool _isLoadingFinish = false;
+  bool _opacityText = false;
+  bool _isFirstScreen = true;
 
   @override
   void initState() {
@@ -20,9 +26,14 @@ class _DetailNewStoreState extends State<DetailNewStore> {
   }
 
   void newStoreToDio() async {
-    newStore = await mainScreenNewStoreDetail(page);
+    originalStore = await mainScreenNewStoreDetail(page);
+    newStore = List.from(originalStore); // 원래의 스토어 리스트 백업
     setState(() {
       storeCount = newStore.length;
+    });
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() {
+      _isLoadingFinish = true;
     });
   }
 
@@ -205,7 +216,7 @@ class _DetailNewStoreState extends State<DetailNewStore> {
                             ),
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -218,112 +229,241 @@ class _DetailNewStoreState extends State<DetailNewStore> {
     );
   }
 
+  //검색 완료 후
+  void isUserSearch(String value) async {
+    if (value.isEmpty) {
+      setState(() {
+        _isFirstScreen = true;
+        _opacityText = false;
+      });
+    } else {
+      List<Map<String, dynamic>> filteredStores = originalStore.where((store) {
+        return store.toString().contains(value);
+      }).toList();
+
+      setState(() {
+        newStore = filteredStores;
+        _opacityText = true;
+        _isFirstScreen = false;
+      });
+    }
+  }
+
+  //뒤로가기 로직
+  void reSetScreen() {
+    if (_opacityText) {
+      setState(() {
+        _textEditingController.text = '';
+        _isFirstScreen = true;
+        _opacityText = false;
+      });
+    } else {
+      Navigator.pop(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: SafeArea(
-        child: ListView.builder(
-          itemCount: storeCount + 1, // 첫 번째 아이템으로 헤더를 추가
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              // 첫 번째 아이템으로 헤더 컨텐츠 반환
-              return Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: screenWidth * 0.03, right: screenWidth * 0.041),
-                    child: Column(
+        child: Stack(
+          children: [
+            IgnorePointer(
+              ignoring: !_isLoadingFinish,
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 420),
+                opacity: _isLoadingFinish ? 1.0 : 0.0,
+                child: Column(
+                  children: [
+                    Column(
                       children: [
-                        SizedBox(
-                          height: screenHeight * 0.064,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: screenWidth * 0.03,
+                              right: screenWidth * 0.041),
+                          child: Column(
                             children: [
-                              IconButton(
-                                icon: const Icon(Icons.arrow_back_ios_rounded,
-                                    size: 24),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                style: TextButton.styleFrom(
-                                  splashFactory: NoSplash.splashFactory,
-                                ),
-                                padding: EdgeInsets.zero,
-                              ),
-                              const Expanded(
-                                child: Center(
-                                  child: Text(
-                                    '신규 스토어',
-                                    style: TextStyle(
-                                      color: Color(0xff111111),
-                                      fontSize: 20,
-                                      fontFamily: 'Pretendard',
+                              SizedBox(
+                                height: screenHeight * 0.064,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(
+                                          Icons.arrow_back_ios_rounded,
+                                          size: 24),
+                                      onPressed: () {
+                                        reSetScreen();
+                                      },
+                                      style: TextButton.styleFrom(
+                                        splashFactory: NoSplash.splashFactory,
+                                      ),
+                                      padding: EdgeInsets.zero,
                                     ),
+                                    const Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          '신규 스토어',
+                                          style: TextStyle(
+                                            color: Color(0xff111111),
+                                            fontSize: 20,
+                                            fontFamily: 'Pretendard',
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Opacity(
+                                      opacity: 0,
+                                      child: IconButton(
+                                        icon: const Icon(
+                                            Icons.arrow_back_ios_rounded,
+                                            size: 24),
+                                        onPressed: () {},
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 1),
+                              Padding(
+                                padding:
+                                    EdgeInsets.only(left: screenWidth * 0.011),
+                                child: SizedBox(
+                                  height: 40,
+                                  child: TextFormField(
+                                    controller: _textEditingController,
+                                    cursorHeight: 20,
+                                    textAlignVertical:
+                                        const TextAlignVertical(y: 0.3),
+                                    maxLines: 1,
+                                    decoration: InputDecoration(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 30, vertical: 10),
+                                      filled: true,
+                                      fillColor: const Color(0xfff5f5f5),
+                                      prefixIcon: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 17),
+                                        child: Transform.translate(
+                                          offset: const Offset(10, 0),
+                                          child: const Icon(
+                                            Icons.search,
+                                            size: 30,
+                                            color: Color(0xff6fbf8a),
+                                          ),
+                                        ),
+                                      ),
+                                      hintText: '검색어를 입력해주세요.',
+                                      hintStyle: const TextStyle(
+                                          color: Color(0xffc1c1c1),
+                                          fontFamily: 'Pretendard'),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(28),
+                                        borderSide: BorderSide.none,
+                                      ),
+                                    ),
+                                    onFieldSubmitted: (value) {
+                                      isUserSearch(value);
+                                    },
                                   ),
                                 ),
                               ),
-                              const Opacity(
-                                opacity: 0,
-                                child: IconButton(
-                                  icon: Icon(Icons.arrow_back_ios_rounded,
-                                      size: 24),
-                                  onPressed: null,
-                                ),
-                              ),
+                              const SizedBox(height: 15),
                             ],
                           ),
                         ),
-                        const SizedBox(height: 1),
-                        Padding(
-                          padding: EdgeInsets.only(left: screenWidth * 0.011),
-                          child: SizedBox(
-                            height: 40,
-                            child: TextFormField(
-                              cursorHeight: 20,
-                              textAlignVertical:
-                                  const TextAlignVertical(y: 0.3),
-                              maxLines: 1,
-                              decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 10),
-                                filled: true,
-                                fillColor: const Color(0xfff5f5f5),
-                                prefixIcon: Padding(
-                                  padding: const EdgeInsets.only(right: 17),
-                                  child: Transform.translate(
-                                    offset: const Offset(10, 0),
-                                    child: const Icon(
-                                      Icons.search,
-                                      size: 30,
-                                      color: Color(0xff6fbf8a),
-                                    ),
-                                  ),
-                                ),
-                                hintText: '검색어를 입력해주세요.',
-                                hintStyle: const TextStyle(
-                                    color: Color(0xffc1c1c1),
-                                    fontFamily: 'Pretendard'),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(28),
-                                  borderSide: BorderSide.none,
-                                ),
-                              ),
-                              onFieldSubmitted: (value) {},
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 15),
                       ],
                     ),
-                  ),
-                ],
-              );
-            } else {
-              return newStoreContainer(newStore[index - 1]);
-            }
-          },
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          // 처음 스크린
+                          AnimatedOpacity(
+                            duration: const Duration(milliseconds: 420),
+                            opacity: _isFirstScreen ? 1.0 : 0.0,
+                            child: IgnorePointer(
+                              ignoring: _isFirstScreen,
+                              child: ListView.builder(
+                                itemCount: originalStore.length,
+                                itemBuilder: (context, index) {
+                                  return newStoreContainer(
+                                      originalStore[index]);
+                                },
+                              ),
+                            ),
+                          ),
+                          //두번째 스크린
+                          AnimatedOpacity(
+                            duration: const Duration(milliseconds: 420),
+                            opacity: !_isFirstScreen ? 1.0 : 0.0,
+                            child: IgnorePointer(
+                              ignoring: !_isFirstScreen,
+                              child: ListView.builder(
+                                itemCount: newStore.length + 1,
+                                itemBuilder: (context, index) {
+                                  if (index == newStore.length) {
+                                    return IgnorePointer(
+                                      ignoring: _opacityText,
+                                      child: AnimatedOpacity(
+                                        opacity: !_opacityText ? 0.0 : 1.0,
+                                        duration:
+                                            const Duration(milliseconds: 20),
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                              top: screenHeight * 0.031),
+                                          child: const Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                '원하는 업체가 없으신가요?',
+                                                style: TextStyle(
+                                                  color: Color(0xffc1c1c1),
+                                                  fontSize: 12,
+                                                  fontFamily: 'Pretendard',
+                                                ),
+                                              ),
+                                              SizedBox(width: 7),
+                                              Text(
+                                                '파트너십 요청하러 가기',
+                                                style: TextStyle(
+                                                  color: Color(0xff8e8e8e),
+                                                  fontSize: 12,
+                                                  fontFamily: 'Pretendard',
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  return newStoreContainer(newStore[index]);
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            IgnorePointer(
+              ignoring: _isLoadingFinish,
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 420),
+                opacity: !_isLoadingFinish ? 1.0 : 0.0,
+                child: const NewStoreShimmer(),
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:my_dream/Page/4_main_page/4.10_main_quest.dart';
-import 'package:my_dream/Page/4_main_page/4.11_main_shimmer.dart';
+import 'package:my_dream/coreService/Shimmer/main_shimmer.dart';
 import 'package:my_dream/coreService/login_dio.dart';
 import 'package:my_dream/Page/4_main_page/4.5_main_new_store.dart';
 import 'package:my_dream/Page/4_main_page/4.6_main_best_review.dart';
@@ -197,7 +197,7 @@ class _MainScreenState extends State<MainScreen> {
   // 쉬머효과 메인 로딩 완료
   void _isMainLoadingComplete(int finish) async {
     if (finish == 4) {
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 1));
       setState(() {
         _isLoadFinish = true;
       });
@@ -459,7 +459,6 @@ class _MainScreenState extends State<MainScreen> {
                             ),
                           ),
                         ),
-
                         ////------------------------
                         Positioned(
                           child: Padding(

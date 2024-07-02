@@ -24,6 +24,7 @@ void main() async {
 
   // 루팅 및 탈옥 방지
   bool jailbroken = await FlutterJailbreakDetection.jailbroken;
+  //bool developerMode = await FlutterJailbreakDetection.developerMode;
   if (jailbroken /*|| developerMode*/) {
     exit(0);
   }

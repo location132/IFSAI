@@ -169,8 +169,8 @@ Future<List<Map<String, dynamic>>> mainScreenNewStoreDetail(String page) async {
     'sort': 'RECENTLY_UPLOAD',
     "distance.locationX": 0,
     "distance.localtionY": 0,
-    'page': 0,
-    'size': 10,
+    'page': page,
+    'size': 1000,
   };
 
   try {
