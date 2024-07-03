@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_login/flutter_naver_login.dart';
-import 'package:my_dream/coreService/login_dio.dart';
+import 'package:my_dream/Page/2_login_page/login_dio/login_dio.dart';
 import 'package:my_dream/coreService/provider.dart';
 import 'package:provider/provider.dart';
 

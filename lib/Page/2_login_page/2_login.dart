@@ -3,10 +3,11 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_dream/Page/2_login_page/2.1_login_error.dart';
-import 'package:my_dream/Page/2_login_page/login/snsLogin/apple_login.dart';
-import 'package:my_dream/Page/2_login_page/login/snsLogin/google_login.dart';
-import 'package:my_dream/Page/2_login_page/login/snsLogin/kakao_login.dart';
-import 'package:my_dream/Page/2_login_page/login/snsLogin/naver_login.dart';
+import 'package:my_dream/Page/2_login_page/snsLogin/apple_login.dart';
+import 'package:my_dream/Page/2_login_page/snsLogin/google_login.dart';
+import 'package:my_dream/Page/2_login_page/snsLogin/kakao_login.dart';
+import 'package:my_dream/Page/2_login_page/snsLogin/naver_login.dart';
+
 import 'package:my_dream/coreService/provider.dart';
 import 'package:provider/provider.dart';
 

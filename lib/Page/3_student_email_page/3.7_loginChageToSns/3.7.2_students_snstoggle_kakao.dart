@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import 'package:my_dream/coreService/login_dio.dart';
+import 'package:my_dream/Page/2_login_page/login_dio/login_dio.dart';
 import 'package:my_dream/coreService/provider.dart';
 import 'package:provider/provider.dart';
 

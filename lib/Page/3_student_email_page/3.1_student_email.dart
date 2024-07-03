@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:my_dream/Page/3_student_email_page/3.4_success_dialog.dart';
 import 'package:my_dream/Page/3_student_email_page/3.5_email_error_dialog.dart';
 import 'package:my_dream/Page/3_student_email_page/3.7_loginChageToSns/3.7.1_students_snstoggle_naver.dart';
-import 'package:my_dream/coreService/login_dio.dart';
+import 'package:my_dream/Page/2_login_page/login_dio/login_dio.dart';
 import 'package:my_dream/coreService/provider.dart';
 import 'package:my_dream/coreService/verifty_form.dart';
 import 'package:provider/provider.dart';
