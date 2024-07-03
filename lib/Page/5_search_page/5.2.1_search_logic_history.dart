@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_dream/Page/5_search_page/search_dio/search_screen_dio.dart';
 import 'package:my_dream/coreService/Sharedpreferences.dart';
 import 'package:my_dream/coreService/provider.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,9 @@ class _SearchLogicHistoryState extends State<SearchLogicHistory> {
   bool _isFirstSearchBar = true;
   bool _hasThreeOrMoreRecentSearches = false;
   bool _isRemoveSate = true;
+  late Future<List<Map<String, dynamic>>> resultValue;
+  List<Map<String, dynamic>> searchHistory = [];
+  List<Map<String, dynamic>> searchHistory2 = [];
 
   @override
   void didChangeDependencies() {
@@ -25,16 +29,62 @@ class _SearchLogicHistoryState extends State<SearchLogicHistory> {
     _isFirstSearchBar = false;
   }
 
+  @override
+  void initState() {
+    super.initState();
+    resultValue = getSearchHistoryStatus();
+  }
+
+  void seeMoreHistory() async {
+    setState(() {
+      _showAll = !_showAll;
+    });
+
+    bool loginState =
+        Provider.of<LoginModel>(context, listen: false).loginStatus;
+
+    if (loginState) {
+      // 로그인 상태일 때
+      List<Map<String, dynamic>> allHistory = searchHistory;
+      setState(() {
+        searchHistory2 = _showAll
+            ? allHistory.take(10).toList()
+            : allHistory.take(3).toList();
+        _hasThreeOrMoreRecentSearches = allHistory.length >= 4;
+      });
+    } else {
+      // 로그인하지 않은 상태일 때
+      List<String> history =
+          await preferencesSearchHistory.getSearchHistory() ?? [];
+      List<Map<String, dynamic>> allHistory = history.reversed
+          .map((item) => {"content": item, "historyId": ""})
+          .toList();
+
+      setState(() {
+        searchHistory2 = _showAll
+            ? allHistory.take(10).toList()
+            : allHistory.take(3).toList();
+        _hasThreeOrMoreRecentSearches = history.length >= 4;
+      });
+    }
+
+    resultValue = Future.value(searchHistory2);
+  }
+
 // 검색기록 보여주기
-  Future<List<Map<String, dynamic>>> getSearchHistory() async {
+  Future<List<Map<String, dynamic>>> getSearchHistoryStatus() async {
     bool loginState =
         Provider.of<LoginModel>(context, listen: false).loginStatus;
     if (loginState) {
-      return [];
+      searchHistory = await recentSearch();
+      setState(() {
+        _hasThreeOrMoreRecentSearches = searchHistory.length >= 4;
+      });
+      return searchHistory.take(3).toList();
     } else {
       List<String> history =
           await preferencesSearchHistory.getSearchHistory() ?? [];
-      List<Map<String, String>> searchHistory = history.reversed
+      searchHistory = history.reversed
           .map((item) => {"content": item, "historyId": ""})
           .toList();
 
@@ -112,7 +162,7 @@ class _SearchLogicHistoryState extends State<SearchLogicHistory> {
           opacity: _historyOpacity,
           duration: const Duration(milliseconds: 300), // 0.7초 동안 애니메이션 실행
           child: FutureBuilder<List<Map<String, dynamic>>>(
-            future: getSearchHistory(),
+            future: resultValue,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting &&
                   _isFirstSearchBar) {
@@ -198,15 +248,7 @@ class _SearchLogicHistoryState extends State<SearchLogicHistory> {
             splashFactory: NoSplash.splashFactory,
             highlightColor: Colors.transparent,
             onTap: () {
-              if (!_showAll) {
-                setState(() {
-                  _showAll = true;
-                });
-              } else {
-                setState(() {
-                  _showAll = false;
-                });
-              }
+              seeMoreHistory();
             },
             child: !_showAll
                 ? const Text(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_dream/Page/5_search_page/search_dio/search_screen_dio.dart';
 import 'package:my_dream/coreService/Sharedpreferences.dart';
 import 'package:my_dream/coreService/provider.dart';
 import 'package:provider/provider.dart';
@@ -46,7 +47,7 @@ class _MainScreenState extends State<MainSearchBarScreen> {
       bool isLoginStatus =
           Provider.of<LoginModel>(context, listen: false).loginStatus;
       if (isLoginStatus) {
-        // 로그인된 상태에서 수행할 로직 추가
+        userHistory(trimmedSearchHistory);
       } else {
         if (trimmedSearchHistory.isNotEmpty) {
           List<String> historyMatch =
@@ -55,9 +56,9 @@ class _MainScreenState extends State<MainSearchBarScreen> {
             await preferencesSearchHistory
                 .setSearchHistory(trimmedSearchHistory);
           }
-          _closeSearchScreen();
         }
       }
+      _closeSearchScreen();
     } catch (e) {}
   }
 
