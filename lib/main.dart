@@ -58,6 +58,22 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      loginModel();
+    });
+  }
+
+  void loginModel() {
+    final loginStatus = Provider.of<LoginModel>(context, listen: false);
+
+    if (widget.isLoggedIn) {
+      loginStatus.setloginStatus(true);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       // 사용자 탭 감지
