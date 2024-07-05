@@ -65,6 +65,7 @@ class _MainSearcscreenState extends State<MainSearcscreen>
         _controller.forward();
       } else if (_controller.status == AnimationStatus.completed &&
           !searchModel.isSearchScreen) {
+        // 검색창 닫기
         searchModel.setresultSearchAni(false);
         _controller.reverse();
       }

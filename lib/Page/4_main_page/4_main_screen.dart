@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:my_dream/Page/4_main_page/4.10_main_quest.dart';
+import 'package:my_dream/Page/5_search_page/search_dio/search_screen_dio.dart';
 import 'package:my_dream/coreService/Shimmer/main_shimmer.dart';
 import 'package:my_dream/Page/2_login_page/login_dio/login_dio.dart';
 import 'package:my_dream/Page/4_main_page/4.5_main_new_store.dart';
@@ -12,7 +13,7 @@ import 'package:my_dream/Page/4_main_page/4.1_main_logo_searchbar.dart';
 import 'package:my_dream/Page/4_main_page/4.2_main_adBanner.dart';
 import 'package:my_dream/Page/4_main_page/4.3_main_category.dart';
 import 'package:my_dream/Page/4_main_page/4.4_main_top12.dart';
-import 'package:my_dream/Page/6_search_results_page/6_search_results_screen.dart';
+import 'package:my_dream/coreService/Shimmer/search_results_shimmer.dart';
 import 'package:my_dream/coreService/provider.dart';
 import 'package:my_dream/coreService/start_service_maintenance_notice.dart';
 import 'package:provider/provider.dart';
@@ -41,13 +42,16 @@ class _MainScreenState extends State<MainScreen> {
   int _finishCount = 0;
 // ---------
 
+// 검색 dio
+  List<Map<String, dynamic>> searchDio = [];
+//
+
   OverlayEntry? _overlayEntry;
 
   void serverConnection() async {
     bool result = await connectionServer();
 
     if (!result && mounted) {
-      print('다이아로그 실행');
       showDialog(
         context: context,
         barrierDismissible: false,
@@ -86,10 +90,29 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+
     serverConnection();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollController.addListener(_scrollListener);
+      getDioSearchValue();
     });
+  }
+
+  void getDioSearchValue() async {
+    bool loginState =
+        Provider.of<LoginModel>(context, listen: false).loginStatus;
+    final searchScreenStatus =
+        Provider.of<SearchScreenModel>(context, listen: false);
+    if (loginState) {
+      // 검색 히스토리 불러오기
+      searchDio = await recentSearch();
+      searchScreenStatus.setStartSearch(searchDio);
+      //인기검색어 불러오기
+      searchDio = await popularSearches();
+      searchScreenStatus.setPopularSearches(searchDio);
+      _incrementFinishCount();
+      // 추천 검색어 불러오기
+    }
   }
 
   @override
@@ -104,7 +127,6 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {
       // 제어 장치
       _isFirstLogoEntry = false;
-
       _isLogoMove = true;
       _isLogoAni = true;
     });
@@ -115,7 +137,6 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {
       // 제어 장치
       _isFirstSearchbarEntry = false;
-
       _isSearchBarMove = true;
       _isSearchBarAni = true;
     });
@@ -162,6 +183,7 @@ class _MainScreenState extends State<MainScreen> {
     if (searchModelStatus.isresultSearchAni) {
       if (searchModelStatus.isSearchScreen) {
         _closeSearchScreen();
+        getDioSearchValue();
       } else if (searchModelStatus.isSearchResultsScreen &&
           !searchModelStatus.isSearchScreen) {
         searchModelStatus.setSearchResultsScreen(false);
@@ -183,6 +205,7 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
+// 검색창 닫기
   void _closeSearchScreen() {
     final searchModel = Provider.of<SearchBarModel>(context, listen: false);
     searchModel.setSearchScreenStaus(false);
@@ -196,11 +219,23 @@ class _MainScreenState extends State<MainScreen> {
 
   // 쉬머효과 메인 로딩 완료
   void _isMainLoadingComplete(int finish) async {
-    if (finish == 4) {
-      await Future.delayed(const Duration(seconds: 1));
-      setState(() {
-        _isLoadFinish = true;
-      });
+    bool loginState =
+        Provider.of<LoginModel>(context, listen: false).loginStatus;
+
+    if (loginState) {
+      if (finish == 5) {
+        await Future.delayed(const Duration(seconds: 1));
+        setState(() {
+          _isLoadFinish = true;
+        });
+      }
+    } else {
+      if (finish == 4) {
+        await Future.delayed(const Duration(seconds: 1));
+        setState(() {
+          _isLoadFinish = true;
+        });
+      }
     }
   }
 
@@ -366,7 +401,13 @@ class _MainScreenState extends State<MainScreen> {
                                                 : screenHeight * 0.0),
                                     child: const SizedBox(),
                                   ),
-                                  const SearchResultsScreen(),
+                                  Visibility(
+                                    visible:
+                                        searchModelStatus.isSearchResultsScreen,
+                                    maintainState:
+                                        searchModelStatus.isSearchResultsScreen,
+                                    child: const SearchResultsShimmer(),
+                                  ),
                                 ],
                               ),
                             ),

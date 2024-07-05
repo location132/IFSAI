@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_dream/Page/6_search_results_page/search_screen_dio.dart';
 
 class SearchResultsScreen extends StatefulWidget {
   const SearchResultsScreen({super.key});
@@ -8,28 +9,48 @@ class SearchResultsScreen extends StatefulWidget {
 }
 
 class _SearchResultsScreenState extends State<SearchResultsScreen> {
+  List<Map<String, dynamic>> serverResult = [];
+
+  @override
+  void initState() {
+    super.initState();
+    searchResultGetDio();
+  }
+
+  void searchResultGetDio() async {
+    serverResult = await searchResultData(keyword: '치킨');
+    print(serverResult);
+
+    setState(() {});
+  }
+
   List<String> listItem = [" 최신순", " 인기순", " 거리순"];
   String? selectedValue;
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    // final screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight = MediaQuery.of(context).size.height;
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.only(
             left: screenWidth * 0.041, right: screenWidth * 0.041),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 10),
+            Container(
+              height: screenHeight * 0.06,
+              decoration: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: Color(0xFFEEEEEE), width: 2),
+                ),
+              ),
               child: Row(
                 children: [
-                  const Icon(
-                    Icons.tune,
-                    color: Color(0xff8e8e8e),
-                  ),
-                  const SizedBox(width: 10),
+                  // const Icon(
+                  //   Icons.tune,
+                  //   color: Color(0xff8e8e8e),
+                  // ),
+                  // const SizedBox(width: 10),
                   Container(
                     height: 24,
                     decoration: BoxDecoration(
@@ -43,6 +64,8 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 10, right: 5),
                       child: DropdownButton<String>(
+                        //padding: const EdgeInsets.only(top: 1, bottom: 2),
+                        underline: Container(),
                         value: selectedValue,
                         hint: const Text(
                           '최신순',
@@ -54,7 +77,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                         ),
                         style: const TextStyle(
                           color: Color(0xff8e8e8e),
-                          fontSize: 12,
+                          fontSize: 13,
                           fontFamily: 'Pretendard',
                         ),
                         items: listItem.map((String item) {
@@ -75,7 +98,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
               ),
             ),
             //----------------------------------
-            const SizedBox(height: 40),
+            const SizedBox(height: 20),
             searchCard(),
             searchCard(),
             searchCard(),

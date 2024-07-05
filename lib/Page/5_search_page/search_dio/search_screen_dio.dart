@@ -47,7 +47,7 @@ Future<List<Map<String, dynamic>>> recentSearch() async {
 
 // 검색기록 추가
 Future<bool> userHistory(String value, {int retry = 0}) async {
-  print('몇번 실행?2');
+  print('검색기록 추가');
   Dio dio = Dio();
   var cookieJar = CookieJar();
   dio.interceptors.add(CookieManager(cookieJar));
@@ -87,7 +87,7 @@ Future<bool> userHistory(String value, {int retry = 0}) async {
 }
 
 // 인기 검색어
-Future<List<Map<String, dynamic>>> popularSearches() async {
+Future<List<Map<String, dynamic>>> popularSearches({int retry = 0}) async {
   print('몇번 실행?3');
   Dio dio = Dio();
   var uri = '${dotenv.env['API_URL']}/v1/popular-search-word';
@@ -99,16 +99,71 @@ Future<List<Map<String, dynamic>>> popularSearches() async {
     var response = await dio.get(uri, queryParameters: sendData);
 
     if (response.statusCode == 200) {
-      List<String> data = response.data;
-      for (var item in data) {
-        Map<String, dynamic> value = {'value0': item};
-        popularSearchesValue.add(value);
+      if (response.data.toString().contains('errorCode: -35')) {
+        await dioCore(response.data);
+        return await popularSearches();
+      } else {
+        if (response.data is List && response.data.length <= 10 && retry < 1) {
+          await testDio();
+          return await popularSearches(retry: retry + 1);
+        } else {
+          List<dynamic> data = response.data;
+          for (var item in data) {
+            Map<String, dynamic> value = {
+              'value0': item['searchWord'],
+              'value1': item['rankChangeValue'],
+            };
+
+            popularSearchesValue.add(value);
+          }
+          return popularSearchesValue;
+        }
       }
-      return popularSearchesValue;
     } else {
       return [];
     }
   } catch (e) {
     return [];
+  }
+}
+
+// 인기검색어 0개일 경우 강제 푸쉬
+Future<void> testDio() async {
+  Dio dio = Dio();
+  var uri = '${dotenv.env['API_URL']}/v1/popular-search-word/push';
+  var test1 = await dio.post(uri);
+  if (test1.statusCode == 200) {
+    print('강제푸쉬 완료');
+  }
+}
+
+// 인기 검색어 추가 [로그인]
+Future<void> postPopularSearches(String value) async {
+  print('인기 검색어 추가');
+  Dio dio = Dio();
+  var cookieJar = CookieJar();
+  dio.interceptors.add(CookieManager(cookieJar));
+
+  var uri = '${dotenv.env['API_URL']}/v1/popular-search-word';
+
+  Map<String, dynamic> sendData = {'searchWord': value};
+  String? token = await storage.read(key: 'accessToken');
+
+  if (token != null) {
+    List<Cookie> cookies = [Cookie('accessToken', token)];
+    cookieJar.saveFromResponse(Uri.parse(uri), cookies);
+  }
+
+  try {
+    var response = await dio.post(uri, data: sendData);
+
+    if (response.statusCode == 200) {
+      if (response.data.toString().contains('errorCode: -35')) {
+        dioCore(response.data);
+        return await postPopularSearches(value);
+      }
+    } else {}
+  } catch (e) {
+    print(e);
   }
 }

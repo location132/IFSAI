@@ -93,3 +93,23 @@ class SearchBarModel with ChangeNotifier {
     notifyListeners();
   }
 }
+
+class SearchScreenModel with ChangeNotifier {
+  List<Map<String, dynamic>>? _searchHistory; // 검색 히스토리
+  List<Map<String, dynamic>>? _popularSearches; // 인기 검색어
+
+  List<Map<String, dynamic>>? get searchHistory => _searchHistory;
+  List<Map<String, dynamic>>? get popularSearches => _popularSearches;
+
+  void setStartSearch(List<Map<String, dynamic>> searchHistory) {
+    _searchHistory = searchHistory;
+    print(_searchHistory);
+    notifyListeners();
+  }
+
+  void setPopularSearches(List<Map<String, dynamic>> popularSearches) {
+    _popularSearches = popularSearches;
+    print(_popularSearches);
+    notifyListeners();
+  }
+}

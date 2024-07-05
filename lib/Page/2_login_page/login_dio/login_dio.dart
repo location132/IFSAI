@@ -3,7 +3,6 @@ import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:my_dream/coreService/dio_core.dart';
 
 const storage = FlutterSecureStorage();
 var cookieJar = CookieJar();

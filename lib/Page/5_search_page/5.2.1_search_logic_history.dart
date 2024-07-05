@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_dream/Page/5_search_page/search_dio/search_screen_dio.dart';
 import 'package:my_dream/coreService/Sharedpreferences.dart';
 import 'package:my_dream/coreService/provider.dart';
 import 'package:provider/provider.dart';
@@ -73,10 +72,12 @@ class _SearchLogicHistoryState extends State<SearchLogicHistory> {
 
 // 검색기록 보여주기
   Future<List<Map<String, dynamic>>> getSearchHistoryStatus() async {
+    final searchScreenStatus =
+        Provider.of<SearchScreenModel>(context, listen: false);
     bool loginState =
         Provider.of<LoginModel>(context, listen: false).loginStatus;
     if (loginState) {
-      searchHistory = await recentSearch();
+      searchHistory = searchScreenStatus.searchHistory!;
       setState(() {
         _hasThreeOrMoreRecentSearches = searchHistory.length >= 4;
       });
@@ -87,7 +88,6 @@ class _SearchLogicHistoryState extends State<SearchLogicHistory> {
       searchHistory = history.reversed
           .map((item) => {"content": item, "historyId": ""})
           .toList();
-
       if (!_showAll) {
         searchHistory = searchHistory.take(3).toList(); // 최대 3개만 보여주기
         setState(() {

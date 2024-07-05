@@ -20,6 +20,7 @@ class _MainScreenState extends State<MainSearchBarScreen> {
       PreferencesSearchHistory();
   bool _showNotificationIcon = true;
   String _saveSearchController = '';
+  List<Map<String, dynamic>> searchDio = [];
 
 // 메인화면에서 서치바 클릭 시
   void _toggleBottomSheet() async {
@@ -47,7 +48,8 @@ class _MainScreenState extends State<MainSearchBarScreen> {
       bool isLoginStatus =
           Provider.of<LoginModel>(context, listen: false).loginStatus;
       if (isLoginStatus) {
-        userHistory(trimmedSearchHistory);
+        await userHistory(trimmedSearchHistory); //검색 히스토리 추가 [로그인]
+        await postPopularSearches(trimmedSearchHistory); // 인기검색어 추가
       } else {
         if (trimmedSearchHistory.isNotEmpty) {
           List<String> historyMatch =
@@ -65,13 +67,30 @@ class _MainScreenState extends State<MainSearchBarScreen> {
 // 사용자 검색 완료 => 검색창 종료
   void _closeSearchScreen() async {
     final searchModel = Provider.of<SearchBarModel>(context, listen: false);
-
     searchModel.setSearchController('');
     widget.searchScreen(false);
     searchModel.setSearchScreenStaus(false);
     searchModel.setFirstTabStatus(true);
     await Future.delayed(const Duration(milliseconds: 120));
     searchModel.setSearchResultsScreen(true);
+    await getDioSearchValue();
+  }
+
+  Future<void> getDioSearchValue() async {
+    print('검색기록 불러오기');
+    bool loginState =
+        Provider.of<LoginModel>(context, listen: false).loginStatus;
+    final searchScreenStatus =
+        Provider.of<SearchScreenModel>(context, listen: false);
+    if (loginState) {
+      // 검색 히스토리 불러오기
+      searchDio = await recentSearch();
+      searchScreenStatus.setStartSearch(searchDio);
+      //인기검색어 불러오기
+      searchDio = await popularSearches();
+      searchScreenStatus.setPopularSearches(searchDio);
+      // 추천 검색어 불러오기
+    }
   }
 
   @override
@@ -87,20 +106,24 @@ class _MainScreenState extends State<MainSearchBarScreen> {
       });
     }
 
-    if (searchModel.isUserTextController.isNotEmpty) {
-      _textController.text = searchModel.isUserTextController;
-      _saveSearchController = _textController.text;
-      isSearchHistory(_textController.text);
-    }
+    if (mounted) {
+      if (searchModel.isUserTextController.isNotEmpty) {
+        _textController.text = searchModel.isUserTextController;
+        _saveSearchController = _textController.text;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          isSearchHistory(_saveSearchController);
+        });
+      }
 
-    if (!searchModel.isSearchResultsScreen) {
-      setState(() {
-        _textController.text = '';
-      });
-    } else {
-      setState(() {
-        _textController.text = _saveSearchController;
-      });
+      if (!searchModel.isSearchResultsScreen) {
+        setState(() {
+          _textController.text = '';
+        });
+      } else {
+        setState(() {
+          _textController.text = _saveSearchController;
+        });
+      }
     }
 
     return Row(

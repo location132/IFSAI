@@ -42,6 +42,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => LoginModel()),
         ChangeNotifierProvider(create: (_) => SearchBarModel()),
+        ChangeNotifierProvider(create: (_) => SearchScreenModel()),
       ],
       child: MyApp(isLoggedIn: isLoggedIn, apiUrl: apiUrl),
     ),
