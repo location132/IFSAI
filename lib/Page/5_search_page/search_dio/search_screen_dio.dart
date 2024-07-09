@@ -28,6 +28,7 @@ Future<List<Map<String, dynamic>>> recentSearch() async {
         await dioCore(respons.data);
         return await recentSearch();
       } else {
+        print(respons.data);
         List<dynamic> responsdata = respons.data;
         for (var reponsedata in responsdata) {
           Map<String, dynamic> data = {
@@ -65,7 +66,7 @@ Future<bool> userHistory(String value, {int retry = 0}) async {
   if (retry <= 1) {
     try {
       var response = await dio.post(uri, data: data);
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         return true;
       } else {
         return false;
@@ -167,3 +168,5 @@ Future<void> postPopularSearches(String value) async {
     print(e);
   }
 }
+
+// 검색
