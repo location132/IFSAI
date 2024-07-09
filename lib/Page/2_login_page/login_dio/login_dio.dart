@@ -297,3 +297,30 @@ Future<bool> connectionServer() async {
     return false;
   }
 }
+
+Future<bool> acconutsTK() async {
+  Dio dio = Dio();
+  var cookieJar = CookieJar();
+
+  dio.interceptors.add(CookieManager(cookieJar));
+
+  var uri = '${dotenv.env['API_URL']}/v1/accounts/tokens';
+
+  String? token = await storage.read(key: 'accessToken');
+  if (token != null) {
+    List<Cookie> cookies = [Cookie('accessToken', token)];
+    cookieJar.saveFromResponse(Uri.parse(uri), cookies);
+  }
+
+  try {
+    var result = await dio.post(uri);
+    if (result.statusCode == 200) {
+      storage.write(key: 'accessToken', value: result.data['accessToken']);
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    return false;
+  }
+}

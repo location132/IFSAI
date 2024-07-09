@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_jailbreak_detection/flutter_jailbreak_detection.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
+import 'package:my_dream/Page/2_login_page/login_dio/login_dio.dart';
 import 'package:provider/provider.dart';
 import 'package:my_dream/coreService/provider.dart';
 import 'package:my_dream/coreService/routes.dart';
@@ -33,9 +34,14 @@ void main() async {
 
   KakaoSdk.init(nativeAppKey: dotenv.env['KAKAO_APP_KEY']!);
 
+  bool isTokenValid = false;
+
   const storage = FlutterSecureStorage();
   String? accessToken = await storage.read(key: 'accessToken');
   bool isLoggedIn = accessToken != null;
+  if (isLoggedIn) {
+    isTokenValid = await acconutsTK();
+  }
 
   runApp(
     MultiProvider(
@@ -44,7 +50,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => SearchBarModel()),
         ChangeNotifierProvider(create: (_) => SearchScreenModel()),
       ],
-      child: MyApp(isLoggedIn: isLoggedIn, apiUrl: apiUrl),
+      child: MyApp(isLoggedIn: isTokenValid, apiUrl: apiUrl),
     ),
   );
 }
@@ -58,22 +64,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      loginModel();
-    });
-  }
-
-  void loginModel() {
-    final loginStatus = Provider.of<LoginModel>(context, listen: false);
-
-    if (widget.isLoggedIn) {
-      loginStatus.setloginStatus(true);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
