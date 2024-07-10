@@ -73,9 +73,7 @@ class _SearchLogicTrendingState extends State<SearchLogicTrending> {
                                 Padding(
                                   padding: const EdgeInsets.only(right: 6),
                                   child: Visibility(
-                                    visible: searcRank != (index) &&
-                                        searcRank != (index) &&
-                                        searcRank == 0,
+                                    visible: searcRank.toString() == '0',
                                     child: Container(
                                       width: 10,
                                       height: 2,
@@ -87,8 +85,8 @@ class _SearchLogicTrendingState extends State<SearchLogicTrending> {
                                   ),
                                 ),
                                 Visibility(
-                                  visible: searcRank == (index) ||
-                                      searcRank == (index),
+                                  visible:
+                                      searcRank.toString() == ('-${index + 1}'),
                                   child: const Text(
                                     'NEW',
                                     style: TextStyle(
@@ -99,8 +97,8 @@ class _SearchLogicTrendingState extends State<SearchLogicTrending> {
                                   ),
                                 ),
                                 Visibility(
-                                  visible: searcRank != (index) &&
-                                      searcRank != (index) &&
+                                  visible: searcRank.toString() !=
+                                          ('-${index + 1}') &&
                                       searcRank < 0,
                                   child: const Icon(
                                     Icons.arrow_drop_down_rounded,
@@ -108,8 +106,8 @@ class _SearchLogicTrendingState extends State<SearchLogicTrending> {
                                   ),
                                 ),
                                 Visibility(
-                                  visible: searcRank != (index + 1) &&
-                                      searcRank != (index - 1) &&
+                                  visible: searcRank.toString() !=
+                                          ('-${index + 1}') &&
                                       searcRank > 0,
                                   child: const Icon(
                                     Icons.arrow_drop_up_rounded,
