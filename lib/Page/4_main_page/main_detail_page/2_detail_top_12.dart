@@ -28,6 +28,7 @@ class _DetailTop12State extends State<DetailTop12> {
     return Padding(
       padding: EdgeInsets.only(left: screenWidth * 0.07, top: 10, bottom: 10),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
             width: 20,
@@ -75,6 +76,7 @@ class _DetailTop12State extends State<DetailTop12> {
             width: screenWidth * 0.4,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(
                   height: 3,
