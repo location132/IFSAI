@@ -24,7 +24,6 @@ Future<List<Map<String, dynamic>>> recentSearch() async {
   try {
     var respons = await dio.get(uri);
     if (respons.statusCode == 200) {
-      print(respons.data);
       if (respons.data.toString().contains('errorCode: -35')) {
         await dioCore(respons.data);
         return await recentSearch();

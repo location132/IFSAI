@@ -1,7 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:my_dream/Page/6_search_results_page/search_screen_dio.dart';
+import 'package:my_dream/coreService/provider.dart';
+import 'package:provider/provider.dart';
 
 class SearchResultsScreen extends StatefulWidget {
   const SearchResultsScreen({super.key});
@@ -20,8 +20,8 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
   }
 
   void searchResultGetDio() async {
-    serverResult = await searchResultData(keyword: '치킨');
-
+    final searchModel = Provider.of<SearchBarModel>(context, listen: false);
+    serverResult = await searchResultData(searchModel.isUserTextController);
     setState(() {});
   }
 

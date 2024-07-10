@@ -43,7 +43,9 @@ class _MainScreenState extends State<MainSearchBarScreen> {
   // 최근 검색어 저장,
   void isSearchHistory(String searchHistory) async {
     String trimmedSearchHistory = searchHistory.trim();
-
+    final searchControllerModel =
+        Provider.of<SearchBarModel>(context, listen: false);
+    searchControllerModel.setSearchController(trimmedSearchHistory);
     try {
       bool isLoginStatus =
           Provider.of<LoginModel>(context, listen: false).loginStatus;
@@ -67,7 +69,6 @@ class _MainScreenState extends State<MainSearchBarScreen> {
 // 사용자 검색 완료 => 검색창 종료
   void _closeSearchScreen() async {
     final searchModel = Provider.of<SearchBarModel>(context, listen: false);
-    searchModel.setSearchController('');
     widget.searchScreen(false);
     searchModel.setSearchScreenStaus(false);
     searchModel.setFirstTabStatus(true);
@@ -106,14 +107,6 @@ class _MainScreenState extends State<MainSearchBarScreen> {
     }
 
     if (mounted) {
-      if (searchModel.isUserTextController.isNotEmpty) {
-        _textController.text = searchModel.isUserTextController;
-        _saveSearchController = _textController.text;
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          isSearchHistory(_saveSearchController);
-        });
-      }
-
       if (!searchModel.isSearchResultsScreen) {
         setState(() {
           _textController.text = '';

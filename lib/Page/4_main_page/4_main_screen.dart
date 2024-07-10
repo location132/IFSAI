@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:my_dream/Page/4_main_page/4.10_main_quest.dart';
 import 'package:my_dream/Page/5_search_page/search_dio/search_screen_dio.dart';
+import 'package:my_dream/Page/6_search_results_page/6_search_results_screen.dart';
 import 'package:my_dream/coreService/Shimmer/main_shimmer.dart';
 import 'package:my_dream/Page/2_login_page/login_dio/login_dio.dart';
 import 'package:my_dream/Page/4_main_page/4.5_main_new_store.dart';
@@ -406,7 +407,8 @@ class _MainScreenState extends State<MainScreen> {
                                         searchModelStatus.isSearchResultsScreen,
                                     maintainState:
                                         searchModelStatus.isSearchResultsScreen,
-                                    child: const SearchResultsShimmer(),
+                                    //child: const SearchResultsShimmer(),
+                                    child: const SearchResultsScreen(),
                                   ),
                                 ],
                               ),

@@ -2,21 +2,19 @@ import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 //검색어 결과
-Future<List<Map<String, dynamic>>> searchResultData(
-    {required String keyword}) async {
+Future<List<Map<String, dynamic>>> searchResultData(keyword) async {
   List<Map<String, dynamic>> extractedData = [];
 
   Dio dio = Dio();
 
-  var url =
-      '${dotenv.env['API_URL']}/v1/markets/$keyword/categories/RESTAURANT';
+  var url = '${dotenv.env['API_URL']}/v1/markets/${'치킨'}/categories/RESTAURANT';
 
   Map<String, dynamic> requestData = {
-    'sort': 'RECENTLY_UPLOAD',
+    "sort": "RECENTLY_UPLOAD",
     "locationX": 0,
-    "localtionY": 0,
-    'page': 0,
-    'size': 6,
+    "locationY": 0,
+    "page": 0,
+    "size": 10,
   };
 
   try {
