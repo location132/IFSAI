@@ -103,20 +103,38 @@ class _SearchLogicHistoryState extends State<SearchLogicHistory> {
   }
 
   // 검삭기록 삭제하기
-  void removeHistory(String searchItem) async {
+  void removeHistory(var searchItem) async {
+    bool loginState =
+        Provider.of<LoginModel>(context, listen: false).loginStatus;
     setState(() {
       _historyOpacity = 0.0;
     });
-    await Future.delayed(const Duration(milliseconds: 299), () async {
-      preferencesSearchHistory.removeSearchHistory(searchItem);
-    });
+    await Future.delayed(const Duration(milliseconds: 300));
+    if (loginState) {
+      await deleteSearchHistory(searchItem);
+      resultValue = resultValue.then((list) {
+        return list.where((item) => item['historyId'] != searchItem).toList();
+      });
+      setState(() {
+        _historyOpacity = 1.0; // 다시 보이게 만들고, 필요하면 검색 기록 없음 메시지 표시
+        _showAll = false;
+      });
+    } else {
+      await Future.delayed(const Duration(milliseconds: 299), () async {
+        preferencesSearchHistory.removeSearchHistory(searchItem);
+      });
 
-    List<String> history =
-        await preferencesSearchHistory.getSearchHistory() ?? [];
-    _hasThreeOrMoreRecentSearches = history.length >= 4;
+      List<String> history =
+          await preferencesSearchHistory.getSearchHistory() ?? [];
+      _hasThreeOrMoreRecentSearches = history.length >= 4;
 
+      setState(() {
+        _historyOpacity = 1.0;
+      });
+    }
     setState(() {
-      _historyOpacity = 1.0;
+      _historyOpacity = 1.0; // 다시 보이게 만들고, 필요하면 검색 기록 없음 메시지 표시
+      _showAll = false;
     });
   }
 
@@ -214,6 +232,7 @@ class _SearchLogicHistoryState extends State<SearchLogicHistory> {
                                         bool loginstate =
                                             loginModel.loginStatus;
                                         if (loginstate) {
+                                          removeHistory(item['historyId']);
                                         } else {
                                           removeHistory(item["content"]);
                                         }

@@ -33,6 +33,7 @@ Future<List<Map<String, dynamic>>> recentSearch() async {
         for (var reponsedata in responsdata) {
           Map<String, dynamic> data = {
             'content': reponsedata['content'],
+            'historyId': reponsedata['historyId'],
           };
           userRecentSearch.add(data);
         }
@@ -88,7 +89,7 @@ Future<bool> userHistory(String value, {int retry = 0}) async {
 }
 
 // 인기 검색어
-Future<List<Map<String, dynamic>>> popularSearches({int retry = 0}) async {
+Future<List<Map<String, dynamic>>> popularSearches() async {
   print('몇번 실행?3');
   Dio dio = Dio();
   var uri = '${dotenv.env['API_URL']}/v1/popular-search-word';
@@ -104,37 +105,22 @@ Future<List<Map<String, dynamic>>> popularSearches({int retry = 0}) async {
         await dioCore(response.data);
         return await popularSearches();
       } else {
-        if (response.data is List && response.data.length < 10 && retry < 1) {
-          await testDio();
-          return await popularSearches(retry: retry + 1);
-        } else {
-          List<dynamic> data = response.data;
-          for (var item in data) {
-            Map<String, dynamic> value = {
-              'value0': item['searchWord'],
-              'value1': item['rankChangeValue'],
-            };
+        List<dynamic> data = response.data;
+        for (var item in data) {
+          Map<String, dynamic> value = {
+            'value0': item['searchWord'],
+            'value1': item['rankChangeValue'],
+          };
 
-            popularSearchesValue.add(value);
-          }
-          return popularSearchesValue;
+          popularSearchesValue.add(value);
         }
+        return popularSearchesValue;
       }
     } else {
       return [];
     }
   } catch (e) {
     return [];
-  }
-}
-
-// 인기검색어 0개일 경우 강제 푸쉬
-Future<void> testDio() async {
-  Dio dio = Dio();
-  var uri = '${dotenv.env['API_URL']}/v1/popular-search-word/push';
-  var test1 = await dio.post(uri);
-  if (test1.statusCode == 200) {
-    print('강제푸쉬 완료');
   }
 }
 
@@ -176,6 +162,29 @@ Future<bool> deleteAllSearchHistory() async {
   dio.interceptors.add(CookieManager(cookieJar));
 
   var uri = '${dotenv.env['API_URL']}/v1/histories/all';
+
+  String? token = await storage.read(key: 'accessToken');
+  if (token != null) {
+    List<Cookie> cookies = [Cookie('accessToken', token)];
+    cookieJar.saveFromResponse(Uri.parse(uri), cookies);
+  }
+
+  try {
+    var response = await dio.delete(uri);
+    return response.statusCode == 200;
+  } catch (e) {
+    print('검색 기록 삭제 중 오류 발생: $e');
+    return false;
+  }
+}
+
+// 검색 기록 하나 삭제 [로그인]
+Future<bool> deleteSearchHistory(int historyId) async {
+  Dio dio = Dio();
+  var cookieJar = CookieJar();
+  dio.interceptors.add(CookieManager(cookieJar));
+
+  var uri = '${dotenv.env['API_URL']}/v1/histories/$historyId';
 
   String? token = await storage.read(key: 'accessToken');
   if (token != null) {
