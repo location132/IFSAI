@@ -200,3 +200,37 @@ Future<List<Map<String, dynamic>>> mainScreenNewStoreDetail(String page) async {
     return [];
   }
 }
+
+//메인화면 퀘스트
+Future<List<Map<String, dynamic>>> mainScreenQuest() async {
+  List<Map<String, dynamic>> extractedData = [];
+
+  Dio dio = Dio();
+
+  var url = '${dotenv.env['API_URL']}/v1/missions';
+
+  try {
+    var response = await dio.get(url);
+
+    if (response.statusCode == 200) {
+      List<dynamic> market = response.data;
+
+      for (var market in market) {
+        Map<String, dynamic> data = {
+          'initWeight': market['initWeight'], // 초기 가중치
+          'increaseWeight': market['increaseWeight'], // 필요한 가중치
+          'weight_currentLevel': market['weight_currentLevel'], // 현재 레벨의 가중치
+          'weight_nextLevel': market['weight_nextLevel'], // 다음 레벨로 가기 위한 가증치
+          'message': market['message'], // 미션 내용
+        };
+        extractedData.add(data);
+      }
+      return extractedData;
+    } else {
+      return [];
+    }
+  } catch (e) {
+    print(e.toString());
+    return [];
+  }
+}
