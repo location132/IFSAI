@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_dream/Page/5_search_page/search_dio/search_screen_dio.dart';
 import 'package:my_dream/coreService/Sharedpreferences.dart';
 import 'package:my_dream/coreService/provider.dart';
 import 'package:provider/provider.dart';
@@ -34,6 +35,7 @@ class _SearchLogicHistoryState extends State<SearchLogicHistory> {
     resultValue = getSearchHistoryStatus();
   }
 
+  // 검색기록 더보기
   void seeMoreHistory() async {
     setState(() {
       _showAll = !_showAll;
@@ -131,6 +133,13 @@ class _SearchLogicHistoryState extends State<SearchLogicHistory> {
           Provider.of<LoginModel>(context, listen: false).loginStatus;
 
       if (loginStatus) {
+        await deleteAllSearchHistory();
+        setState(() {
+          resultValue = Future.value([]);
+          _historyOpacity = 1.0; // 다시 보이게 만들고, 필요하면 검색 기록 없음 메시지 표시
+          _showAll = false;
+          searchStatus.setRemoveSearchHistory(false);
+        });
       } else {
         var localResult = await preferencesSearchHistory.getSearchHistory();
         if (localResult != null && localResult.isNotEmpty) {
@@ -160,7 +169,7 @@ class _SearchLogicHistoryState extends State<SearchLogicHistory> {
       children: [
         AnimatedOpacity(
           opacity: _historyOpacity,
-          duration: const Duration(milliseconds: 300), // 0.7초 동안 애니메이션 실행
+          duration: const Duration(milliseconds: 300),
           child: FutureBuilder<List<Map<String, dynamic>>>(
             future: resultValue,
             builder: (context, snapshot) {

@@ -103,13 +103,11 @@ class SearchScreenModel with ChangeNotifier {
 
   void setStartSearch(List<Map<String, dynamic>> searchHistory) {
     _searchHistory = searchHistory;
-    print(_searchHistory);
     notifyListeners();
   }
 
   void setPopularSearches(List<Map<String, dynamic>> popularSearches) {
     _popularSearches = popularSearches;
-    print(_popularSearches);
     notifyListeners();
   }
 }

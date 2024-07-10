@@ -24,11 +24,11 @@ Future<List<Map<String, dynamic>>> recentSearch() async {
   try {
     var respons = await dio.get(uri);
     if (respons.statusCode == 200) {
+      print(respons.data);
       if (respons.data.toString().contains('errorCode: -35')) {
         await dioCore(respons.data);
         return await recentSearch();
       } else {
-        print(respons.data);
         List<dynamic> responsdata = respons.data;
         for (var reponsedata in responsdata) {
           Map<String, dynamic> data = {
@@ -104,7 +104,7 @@ Future<List<Map<String, dynamic>>> popularSearches({int retry = 0}) async {
         await dioCore(response.data);
         return await popularSearches();
       } else {
-        if (response.data is List && response.data.length <= 10 && retry < 1) {
+        if (response.data is List && response.data.length < 10 && retry < 1) {
           await testDio();
           return await popularSearches(retry: retry + 1);
         } else {
@@ -169,4 +169,25 @@ Future<void> postPopularSearches(String value) async {
   }
 }
 
-// 검색
+// 검색 기록 전체 삭제 [로그인]
+Future<bool> deleteAllSearchHistory() async {
+  Dio dio = Dio();
+  var cookieJar = CookieJar();
+  dio.interceptors.add(CookieManager(cookieJar));
+
+  var uri = '${dotenv.env['API_URL']}/v1/histories/all';
+
+  String? token = await storage.read(key: 'accessToken');
+  if (token != null) {
+    List<Cookie> cookies = [Cookie('accessToken', token)];
+    cookieJar.saveFromResponse(Uri.parse(uri), cookies);
+  }
+
+  try {
+    var response = await dio.delete(uri);
+    return response.statusCode == 200;
+  } catch (e) {
+    print('검색 기록 삭제 중 오류 발생: $e');
+    return false;
+  }
+}

@@ -31,11 +31,9 @@ void main() async {
 
   // API URL 환경 변수 가져오기
   String apiUrl = dotenv.env['API_URL']!;
-
   KakaoSdk.init(nativeAppKey: dotenv.env['KAKAO_APP_KEY']!);
 
   bool isTokenValid = false;
-
   const storage = FlutterSecureStorage();
   String? accessToken = await storage.read(key: 'accessToken');
   bool isLoggedIn = accessToken != null;

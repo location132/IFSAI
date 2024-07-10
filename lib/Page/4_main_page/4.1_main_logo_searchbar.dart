@@ -77,7 +77,6 @@ class _MainScreenState extends State<MainSearchBarScreen> {
   }
 
   Future<void> getDioSearchValue() async {
-    print('검색기록 불러오기');
     bool loginState =
         Provider.of<LoginModel>(context, listen: false).loginStatus;
     final searchScreenStatus =

@@ -20,7 +20,6 @@ class _StartPageState extends State<StartPage> {
     bool result = await connectionServer();
 
     if (!result) {
-      print('다이아로그 실행');
       handleLoginResult();
     }
   }

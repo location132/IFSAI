@@ -19,7 +19,6 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
 
   void searchResultGetDio() async {
     serverResult = await searchResultData(keyword: '치킨');
-    print(serverResult);
 
     setState(() {});
   }
