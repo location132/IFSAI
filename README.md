@@ -78,12 +78,13 @@ lib
 │   ├── 2_login_page
 │   │   ├── 2.1_login_error.dart
 │   │   ├── 2_login.dart
-│   │   └── login
-│   │       └── snsLogin
-│   │           ├── apple_login.dart
-│   │           ├── google_login.dart
-│   │           ├── kakao_login.dart
-│   │           └── naver_login.dart
+│   │   ├── login_dio
+│   │   │   └── login_dio.dart
+│   │   └── snsLogin
+│   │       ├── apple_login.dart
+│   │       ├── google_login.dart
+│   │       ├── kakao_login.dart
+│   │       └── naver_login.dart
 │   ├── 3_student_email_page
 │   │   ├── 3.1_student_email.dart
 │   │   ├── 3.2_student_email_check.dart
@@ -98,7 +99,6 @@ lib
 │   │   └── 3_student_identity_detail.dart
 │   ├── 4_main_page
 │   │   ├── 4.10_main_quest.dart
-│   │   ├── 4.11_main_shimmer.dart
 │   │   ├── 4.1_main_logo_searchbar.dart
 │   │   ├── 4.2_main_adBanner.dart
 │   │   ├── 4.3_main_category.dart
@@ -112,7 +112,8 @@ lib
 │   │   ├── 4.9_main_tourist_attractions.dart
 │   │   ├── 4_main_screen.dart
 │   │   ├── main_detail_page
-│   │   │   └── 1_detail_new_store.dart
+│   │   │   ├── 1_detail_new_store.dart
+│   │   │   └── 2_detail_top_12.dart
 │   │   └── main_dio
 │   │       └── main_screen_dio.dart
 │   ├── 5_search_page
@@ -121,9 +122,12 @@ lib
 │   │   ├── 5.2.2_search_logic_keywords.dart
 │   │   ├── 5.2.3_search_logic_category.dart
 │   │   ├── 5.2.4_search_logic_trending.dart
-│   │   └── 5.2_search_logic.dart
+│   │   ├── 5.2_search_logic.dart
+│   │   └── search_dio
+│   │       └── search_screen_dio.dart
 │   ├── 6_search_results_page
-│   │   └── 6_search_results_screen.dart
+│   │   ├── 6_search_results_screen.dart
+│   │   └── search_screen_dio.dart
 │   └── 7_partnership_request_page
 │       ├── 7.1.1_partnership_request_appbar.dart
 │       ├── 7.1.2_partnership_request_hot.dart
@@ -131,7 +135,11 @@ lib
 │       └── 7.1_partnership_request_screen.dart
 ├── coreService
 │   ├── Sharedpreferences.dart
-│   ├── login_dio.dart
+│   ├── Shimmer
+│   │   ├── main_shimmer.dart
+│   │   ├── newStore_shimmer.dart
+│   │   └── search_results_shimmer.dart
+│   ├── dio_core.dart
 │   ├── provider.dart
 │   ├── routes.dart
 │   ├── start_service_maintenance_notice.dart
