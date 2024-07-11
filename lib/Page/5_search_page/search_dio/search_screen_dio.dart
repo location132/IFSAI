@@ -7,7 +7,6 @@ import 'package:my_dream/coreService/dio_core.dart';
 
 // 검색기록 불러오기
 Future<List<Map<String, dynamic>>> recentSearch() async {
-  print('몇번 실행? 검색기록 불러오기(테스트)');
   Dio dio = Dio();
   var cookieJar = CookieJar();
   dio.interceptors.add(CookieManager(cookieJar));
@@ -48,7 +47,6 @@ Future<List<Map<String, dynamic>>> recentSearch() async {
 
 // 검색기록 추가
 Future<bool> userHistory(String value, {int retry = 0}) async {
-  print('검색기록 추가');
   Dio dio = Dio();
   var cookieJar = CookieJar();
   dio.interceptors.add(CookieManager(cookieJar));
@@ -74,7 +72,6 @@ Future<bool> userHistory(String value, {int retry = 0}) async {
     } catch (e) {
       if (e is DioException) {
         var errorCode = {e.response?.data}.toString();
-        print(errorCode);
         //return userHistory(value, retry: retry + 1);
         return false;
       } else {
@@ -82,14 +79,12 @@ Future<bool> userHistory(String value, {int retry = 0}) async {
       }
     }
   } else {
-    print('데이터 전송 실패');
     return false;
   }
 }
 
 // 인기 검색어
 Future<List<Map<String, dynamic>>> popularSearches() async {
-  print('몇번 실행?3');
   Dio dio = Dio();
   var uri = '${dotenv.env['API_URL']}/v1/popular-search-word';
   List<Map<String, dynamic>> popularSearchesValue = [];
@@ -125,7 +120,6 @@ Future<List<Map<String, dynamic>>> popularSearches() async {
 
 // 인기 검색어 추가 [로그인]
 Future<void> postPopularSearches(String value) async {
-  print('인기 검색어 추가');
   Dio dio = Dio();
   var cookieJar = CookieJar();
   dio.interceptors.add(CookieManager(cookieJar));
@@ -149,9 +143,7 @@ Future<void> postPopularSearches(String value) async {
         return await postPopularSearches(value);
       }
     } else {}
-  } catch (e) {
-    print(e);
-  }
+  } catch (e) {}
 }
 
 // 검색 기록 전체 삭제 [로그인]
@@ -172,7 +164,6 @@ Future<bool> deleteAllSearchHistory() async {
     var response = await dio.delete(uri);
     return response.statusCode == 200;
   } catch (e) {
-    print('검색 기록 삭제 중 오류 발생: $e');
     return false;
   }
 }
@@ -195,7 +186,6 @@ Future<bool> deleteSearchHistory(int historyId) async {
     var response = await dio.delete(uri);
     return response.statusCode == 200;
   } catch (e) {
-    print('검색 기록 삭제 중 오류 발생: $e');
     return false;
   }
 }

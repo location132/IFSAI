@@ -7,7 +7,8 @@ Future<List<Map<String, dynamic>>> searchResultData(keyword) async {
 
   Dio dio = Dio();
 
-  var url = '${dotenv.env['API_URL']}/v1/markets/${'치킨'}/categories/RESTAURANT';
+  var url =
+      '${dotenv.env['API_URL']}/v1/markets/$keyword/categories/RESTAURANT';
 
   Map<String, dynamic> requestData = {
     "sort": "RECENTLY_UPLOAD",

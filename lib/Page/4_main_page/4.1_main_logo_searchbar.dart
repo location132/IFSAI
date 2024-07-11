@@ -22,6 +22,34 @@ class _MainScreenState extends State<MainSearchBarScreen> {
   String _saveSearchController = '';
   List<Map<String, dynamic>> searchDio = [];
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final searchModel = Provider.of<SearchBarModel>(context, listen: false);
+      searchModel.addListener(_updateTextController);
+    });
+  }
+
+  void _updateTextController() {
+    final searchModel = Provider.of<SearchBarModel>(context, listen: false);
+    if (searchModel.isUserTextController.isNotEmpty) {
+      setState(() {
+        _textController.text = searchModel.isUserTextController;
+        _saveSearchController = searchModel.isUserTextController;
+      });
+      // searchModel.setSearchController(''); // 검색기록 릿세
+    }
+  }
+
+  @override
+  void dispose() {
+    final searchModel = Provider.of<SearchBarModel>(context, listen: false);
+    searchModel.removeListener(_updateTextController);
+    _focusNode.dispose();
+    super.dispose();
+  }
+
 // 메인화면에서 서치바 클릭 시
   void _toggleBottomSheet() async {
     final searchModelStatus =
@@ -199,11 +227,5 @@ class _MainScreenState extends State<MainSearchBarScreen> {
         ),
       ],
     );
-  }
-
-  @override
-  void dispose() {
-    _focusNode.dispose();
-    super.dispose();
   }
 }

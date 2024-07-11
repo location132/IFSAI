@@ -172,6 +172,17 @@ class _SearchLogicHistoryState extends State<SearchLogicHistory> {
     });
   }
 
+// 검색기록 클릭
+  void _handleSearchItemTap(String content) async {
+    final searchControllerModel =
+        Provider.of<SearchBarModel>(context, listen: false);
+    searchControllerModel.setSearchController(content);
+    searchControllerModel.setSearchScreenStaus(false);
+    searchControllerModel.setFirstTabStatus(true);
+    await Future.delayed(const Duration(milliseconds: 120));
+    searchControllerModel.setSearchResultsScreen(true);
+  }
+
   @override
   Widget build(BuildContext context) {
     final loginModel = Provider.of<LoginModel>(context, listen: false);
@@ -203,13 +214,8 @@ class _SearchLogicHistoryState extends State<SearchLogicHistory> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 InkWell(
-                                  onTap: () {
-                                    final searchControllerModel =
-                                        Provider.of<SearchBarModel>(context,
-                                            listen: false);
-                                    searchControllerModel
-                                        .setSearchController(item['content']);
-                                  },
+                                  onTap: () =>
+                                      _handleSearchItemTap(item['content']),
                                   child: SizedBox(
                                     width: screenWidth * 0.65,
                                     child: Text(

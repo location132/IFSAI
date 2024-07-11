@@ -54,7 +54,7 @@ class SearchBarModel with ChangeNotifier {
   bool _isRemoveSearchHistory = false; // 검색 기록 모두 삭제
   bool _isSearchResultsScreen = false; // 검색 후 화면
   bool _isresultSearchAni = true; // 검색화면 애니메이션 작동 중이면 true로 사용자 클릭 막기
-  String _isUserTextController = '';
+  String _isUserTextController = ''; // 사용자가 검색한 값
 
   bool get isFirstTab => _isFirstTab;
   bool get isSearchScreen => _isSearchScreen;
