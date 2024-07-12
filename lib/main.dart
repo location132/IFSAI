@@ -98,6 +98,15 @@ class _MyAppState extends State<MyApp> {
           scaffoldBackgroundColor: const Color(0xFFFDFDFD), // #FDFDFD 색상 적용
         ),
         initialRoute: widget.isLoggedIn ? '/MainScreen' : '/StartPage',
+        builder: (context, child) {
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(
+              textScaler:
+                  const TextScaler.linear(1.0), // 사용자가 정의한 글자 크기를 무시하고 기본값으로 설정
+            ),
+            child: child!,
+          );
+        },
       ),
     );
   }
