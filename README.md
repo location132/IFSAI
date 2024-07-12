@@ -54,6 +54,7 @@
 | 메인화면 | 검색화면 |
 |<img src="https://github.com/location132/IFSAI/assets/132702102/3292847c-6ad2-4776-a7cf-3f3c0f4fc4b6" width="300"> | <img src="https://github.com/location132/IFSAI/assets/132702102/514af67d-0dd3-4dfb-ad1b-b4015caa7952" width="300">|
 
+현재는 위 영상보다 더 진행되었습니다
 
 <br />
 
