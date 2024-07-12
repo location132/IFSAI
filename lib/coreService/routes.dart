@@ -7,6 +7,7 @@ import 'package:my_dream/Page/4_main_page/4_main_screen.dart';
 import 'package:my_dream/Page/1_start_page/1_start_Page.dart';
 import 'package:my_dream/Page/4_main_page/main_detail_page/1_detail_new_store.dart';
 import 'package:my_dream/Page/7_partnership_request_page/7.1_partnership_request_screen.dart';
+import 'package:my_dream/Page/4_main_page/main_detail_page/3_detail_tourist_attraction.dart';
 
 final Map<String, WidgetBuilder> appRoutes = {
   '/LoginPage': (context) => const LoginPage(), // 로그인 회원가입 페이지
@@ -20,6 +21,8 @@ final Map<String, WidgetBuilder> appRoutes = {
   '/DetailTop12Store': (context) => const DetailTop12(), //메인화면 top12 스토어 전체 보기
 
   '/DetailNewStore': (context) => const DetailNewStore(), // 메인화면 신규스토어 전체보기
+
+  '/DetailTouristAttraction': (context) => const DetailTouristAttraction(), // 메인화면 관광명소 전체보기
 
   '/StartPage': (context) => const StartPage(), // 로그인 전 페이지
   '/PartnershipRequestScreen': (context) =>
