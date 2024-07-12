@@ -71,7 +71,6 @@ Future<bool> userHistory(String value, {int retry = 0}) async {
       }
     } catch (e) {
       if (e is DioException) {
-        var errorCode = {e.response?.data}.toString();
         //return userHistory(value, retry: retry + 1);
         return false;
       } else {

@@ -13,7 +13,6 @@ class SearchResultsScreen extends StatefulWidget {
 class _SearchResultsScreenState extends State<SearchResultsScreen> {
   List<Map<String, dynamic>> serverResult = [];
   String _searchText = '';
-  String _newSearchText = '';
 
   @override
   void initState() {
@@ -21,14 +20,22 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
     searchResultGetDio();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final searchModel = Provider.of<SearchBarModel>(context);
+    if (searchModel.isUserTextController != _searchText) {
+      searchResultGetDio();
+    }
+  }
+
   void searchResultGetDio() async {
     final searchModel = Provider.of<SearchBarModel>(context, listen: false);
-    _newSearchText = searchModel.isUserTextController;
-    if (_searchText != _newSearchText) {
-      print('서치값 다름 실행');
-      _searchText = searchModel.isUserTextController;
-      serverResult = await searchResultData(searchModel.isUserTextController);
-
+    String newSearchText = searchModel.isUserTextController;
+    if (_searchText != newSearchText) {
+      print('새로운 검색어로 검색 실행: $newSearchText');
+      _searchText = newSearchText;
+      serverResult = await searchResultData(newSearchText);
       setState(() {});
     }
   }
