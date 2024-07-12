@@ -34,7 +34,7 @@ class _MainTouristAttractionsState extends State<MainTouristAttractions> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Row(
+        Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(
@@ -47,13 +47,18 @@ class _MainTouristAttractionsState extends State<MainTouristAttractions> {
               ),
             ),
             Spacer(),
-            Text(
-              '전체보기',
-              style: TextStyle(
-                color: Color(0xff8e8e8e),
-                fontSize: 12,
-                fontFamily: 'Pretendard',
-                fontWeight: FontWeight.w500,
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, '/DetailTouristAttraction');
+              },
+              child: const Text(
+                '전체보기',
+                style: TextStyle(
+                  color: Color(0xff8e8e8e),
+                  fontSize: 12,
+                  fontFamily: 'Pretendard',
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
             Icon(

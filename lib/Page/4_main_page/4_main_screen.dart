@@ -14,7 +14,6 @@ import 'package:my_dream/Page/4_main_page/4.1_main_logo_searchbar.dart';
 import 'package:my_dream/Page/4_main_page/4.2_main_adBanner.dart';
 import 'package:my_dream/Page/4_main_page/4.3_main_category.dart';
 import 'package:my_dream/Page/4_main_page/4.4_main_top12.dart';
-import 'package:my_dream/coreService/Shimmer/search_results_shimmer.dart';
 import 'package:my_dream/coreService/provider.dart';
 import 'package:my_dream/coreService/start_service_maintenance_notice.dart';
 import 'package:provider/provider.dart';
