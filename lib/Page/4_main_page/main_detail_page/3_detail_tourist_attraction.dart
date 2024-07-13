@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_dream/Page/4_main_page/main_dio/main_screen_dio.dart';
 import 'package:my_dream/coreService/Shimmer/newStore_shimmer.dart';
-import 'package:my_dream/Page/4_main_page/main_detail_page/3.1_detail_tourist_container.dart';
+
+import 'package:my_dream/coreService/widget/searchbar.dart';
 
 class DetailTouristAttraction extends StatefulWidget {
   const DetailTouristAttraction({super.key});
@@ -19,10 +20,16 @@ class _DetailTouristAttractionState extends State<DetailTouristAttraction> {
   int storeCount = 0;
   bool _isLoadingFinish = false;
   bool _opacityText = false;
-  bool _isFirstScreen = true;
 
   List<Map<String, dynamic>> serverResult = [];
   bool _isFinish = false;
+
+  @override
+  void initState() {
+    super.initState();
+    newStoreToDio();
+    attractionsGetDio();
+  }
 
   List<String> listItem = [" 최신순", " 인기순", " 거리순"];
   String? selectedValue;
@@ -39,6 +46,25 @@ class _DetailTouristAttractionState extends State<DetailTouristAttraction> {
     });
   }
 
+  //뒤로가기 로직
+  void reSetScreen() {
+    if (_opacityText) {
+      setState(() {
+        _textEditingController.text = '';
+        _opacityText = false;
+      });
+    } else {
+      Navigator.pop(context);
+    }
+  }
+
+  void attractionsGetDio() async {
+    serverResult = await mainScreenTourism();
+    setState(() {
+      _isFinish = true;
+    });
+  }
+
   Widget newStoreContainer(Map<String, dynamic> store) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
@@ -50,45 +76,11 @@ class _DetailTouristAttractionState extends State<DetailTouristAttraction> {
               left: screenWidth * 0.041, right: screenWidth * 0.041),
           child: Stack(
             children: [
-              Container(
-                width: double.infinity,
-                height: screenHeight * 0.125,
-                decoration: ShapeDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    colors: [
-                      const Color(0x0c000000).withOpacity(0.03),
-                      const Color(0x0c000000).withOpacity(0.03),
-                    ],
-                  ),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4)),
-                ),
-              ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-                child: Container(
+                child: SizedBox(
                   width: double.infinity,
                   height: screenHeight * 0.12,
-                  decoration: BoxDecoration(
-                    color: const Color(0xfffdfdfd),
-                    borderRadius: BorderRadius.circular(4),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0x0c000000),
-                        offset: Offset(2, 0),
-                        blurRadius: 6,
-                        spreadRadius: 0,
-                      ),
-                      BoxShadow(
-                        color: Color(0x0c000000),
-                        offset: Offset(-2, 0),
-                        blurRadius: 6,
-                        spreadRadius: 0,
-                      ),
-                    ],
-                  ),
                   child: Stack(
                     children: [
                       Row(
@@ -196,29 +188,6 @@ class _DetailTouristAttractionState extends State<DetailTouristAttraction> {
                           ),
                         ],
                       ),
-                      Positioned(
-                        top: 10,
-                        child: Container(
-                          height: 18,
-                          decoration: const BoxDecoration(
-                            color: Color(0xff6fbf8a),
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.only(left: 6, right: 5),
-                            child: Center(
-                              child: Text(
-                                'NEW',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 8,
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -231,255 +200,180 @@ class _DetailTouristAttractionState extends State<DetailTouristAttraction> {
     );
   }
 
-  //검색 완료 후
-  void isUserSearch(String value) async {
-    if (value.isEmpty) {
-      setState(() {
-        _isFirstScreen = true;
-        _opacityText = false;
-      });
-    } else {
-      List<Map<String, dynamic>> filteredStores = originalStore.where((store) {
-        return store.toString().contains(value);
-      }).toList();
-
-      setState(() {
-        newStore = filteredStores;
-        _opacityText = true;
-        _isFirstScreen = false;
-      });
-    }
-  }
-
-  //뒤로가기 로직
-  void reSetScreen() {
-    if (_opacityText) {
-      setState(() {
-        _textEditingController.text = '';
-        _isFirstScreen = true;
-        _opacityText = false;
-      });
-    } else {
-      Navigator.pop(context);
-    }
-  }
-
-  void attractionsGetDio() async {
-    serverResult = await mainScreenTourism(); // mainScreenTourism 함수를 구현해야 합니다
-    setState(() {
-      _isFinish = true;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    print(screenHeight * 0.024);
     return Scaffold(
       body: SafeArea(
         child: Stack(
           children: [
-            IgnorePointer(
-              ignoring: !_isLoadingFinish,
-              child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 420),
-                opacity: _isLoadingFinish ? 1.0 : 0.0,
-                child: Column(
-                  children: [
-                    Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: screenWidth * 0.03,
-                              right: screenWidth * 0.041),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: screenHeight * 0.064,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(
-                                          Icons.arrow_back_ios_rounded,
-                                          size: 24),
-                                      onPressed: () {
-                                        reSetScreen();
-                                      },
-                                      style: TextButton.styleFrom(
-                                        splashFactory: NoSplash.splashFactory,
-                                      ),
-                                      padding: EdgeInsets.zero,
-                                    ),
-                                    const Expanded(
-                                      child: Center(
-                                        child: Text(
-                                          '관광명소',
-                                          style: TextStyle(
-                                            color: Color(0xff111111),
-                                            fontSize: 20,
-                                            fontFamily: 'Pretendard',
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Opacity(
-                                      opacity: 0,
-                                      child: IconButton(
-                                        icon: const Icon(
-                                            Icons.arrow_back_ios_rounded,
-                                            size: 24),
-                                        onPressed: () {},
-                                      ),
-                                    ),
-                                  ],
-                                ),
+            Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: screenWidth * 0.03, right: screenWidth * 0.041),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: screenHeight * 0.064,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.arrow_back_ios_rounded,
+                                  size: 24),
+                              onPressed: () {
+                                reSetScreen();
+                              },
+                              style: TextButton.styleFrom(
+                                splashFactory: NoSplash.splashFactory,
                               ),
-                              const SizedBox(height: 1),
-                              Padding(
-                                padding:
-                                    EdgeInsets.only(left: screenWidth * 0.011),
-                                child: SizedBox(
-                                  height: 40,
-                                  child: TextFormField(
-                                    controller: _textEditingController,
-                                    cursorHeight: 20,
-                                    textAlignVertical:
-                                        const TextAlignVertical(y: 0.3),
-                                    maxLines: 1,
-                                    decoration: InputDecoration(
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 30, vertical: 10),
-                                      filled: true,
-                                      fillColor: const Color(0xfff5f5f5),
-                                      prefixIcon: Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 17),
-                                        child: Transform.translate(
-                                          offset: const Offset(10, 0),
-                                          child: const Icon(
-                                            Icons.search,
-                                            size: 30,
-                                            color: Color(0xff6fbf8a),
-                                          ),
-                                        ),
-                                      ),
-                                      hintText: '검색어를 입력해주세요.',
-                                      hintStyle: const TextStyle(
-                                          color: Color(0xffc1c1c1),
-                                          fontFamily: 'Pretendard'),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(28),
-                                        borderSide: BorderSide.none,
-                                      ),
-                                    ),
-                                    onFieldSubmitted: (value) {
-                                      isUserSearch(value);
-                                    },
+                              padding: EdgeInsets.zero,
+                            ),
+                            const Expanded(
+                              child: Center(
+                                child: Text(
+                                  '관광명소',
+                                  style: TextStyle(
+                                    color: Color(0xff111111),
+                                    fontSize: 20,
+                                    fontFamily: 'Pretendard',
                                   ),
                                 ),
-                              ),
-                              SizedBox(height: screenHeight * 0.024),
-                              _isFinish
-                                  ? Column(
-                                      children: [
-                                        BuildAttractionCard(
-                                            serverResultData: serverResult[0]),
-                                        SizedBox(height: screenHeight * 0.012),
-                                        BuildAttractionCard(
-                                            serverResultData: serverResult[1]),
-                                      ],
-                                    )
-                                  : const SizedBox(),
-                              Container(
-                                height: screenHeight * 0.06,
-                                decoration: const BoxDecoration(
-                                  border: Border(
-                                    bottom: BorderSide(
-                                        color: Color(0xfff5f5f5), width: 2),
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      height: screenHeight * 0.03,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border.all(
-                                          color: const Color(0xffdbdbdb),
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(2),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 10, right: 5),
-                                        child: DropdownButton<String>(
-                                          //padding: const EdgeInsets.only(top: 1, bottom: 2),
-                                          underline: Container(),
-                                          value: selectedValue,
-                                          hint: const Text(
-                                            '최신순',
-                                          ),
-                                          icon: const Icon(
-                                            Icons.keyboard_arrow_down,
-                                            color: Color(0xff8e8e8e),
-                                            size: 20,
-                                          ),
-                                          style: const TextStyle(
-                                            color: Color(0xff8e8e8e),
-                                            fontSize: 13,
-                                            fontFamily: 'Pretendard',
-                                          ),
-                                          items: listItem.map((String item) {
-                                            return DropdownMenuItem<String>(
-                                              value: item,
-                                              child: Text(item),
-                                            );
-                                          }).toList(),
-                                          onChanged: (String? newValue) {
-                                            setState(() {
-                                              selectedValue = newValue;
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    Expanded(
-                      child: Stack(
-                        children: [
-                          // 처음 스크린
-                          AnimatedOpacity(
-                            duration: const Duration(milliseconds: 420),
-                            opacity: _isFirstScreen ? 1.0 : 0.0,
-                            child: IgnorePointer(
-                              ignoring: !_isFirstScreen,
-                              child: ListView.builder(
-                                itemCount: originalStore.length,
-                                itemBuilder: (context, index) {
-                                  return newStoreContainer(
-                                      originalStore[index]);
-                                },
                               ),
                             ),
-                          ),
-                        ],
+                            Opacity(
+                              opacity: 0,
+                              child: IconButton(
+                                icon: const Icon(Icons.arrow_back_ios_rounded,
+                                    size: 24),
+                                onPressed: () {},
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 1),
+                      const Searchbar(),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: IgnorePointer(
+                    ignoring: !_isLoadingFinish,
+                    child: AnimatedOpacity(
+                      duration: const Duration(milliseconds: 420),
+                      opacity: _isLoadingFinish ? 1.0 : 0.0,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: screenWidth * 0.03,
+                                  right: screenWidth * 0.041),
+                              child: Column(
+                                children: [
+                                  SizedBox(height: screenHeight * 0.024),
+                                  Column(
+                                    children: [
+                                      _isFinish
+                                          ? Column(
+                                              children: [
+                                                BuildAttractionCard(
+                                                    serverResultData:
+                                                        serverResult[0]),
+                                                SizedBox(
+                                                    height:
+                                                        screenHeight * 0.012),
+                                                BuildAttractionCard(
+                                                    serverResultData:
+                                                        serverResult[1]),
+                                              ],
+                                            )
+                                          : const SizedBox(),
+                                      Container(
+                                        height: screenHeight * 0.06,
+                                        decoration: const BoxDecoration(
+                                          border: Border(
+                                            bottom: BorderSide(
+                                                color: Color(0xfff5f5f5),
+                                                width: 2),
+                                          ),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              height: screenHeight * 0.03,
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                border: Border.all(
+                                                  color:
+                                                      const Color(0xffdbdbdb),
+                                                  width: 1,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                              ),
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10, right: 5),
+                                                child: DropdownButton<String>(
+                                                  underline: Container(),
+                                                  value: selectedValue,
+                                                  hint: const Text(
+                                                    '최신순',
+                                                  ),
+                                                  icon: const Icon(
+                                                    Icons.keyboard_arrow_down,
+                                                    color: Color(0xff8e8e8e),
+                                                    size: 20,
+                                                  ),
+                                                  style: const TextStyle(
+                                                    color: Color(0xff8e8e8e),
+                                                    fontSize: 13,
+                                                    fontFamily: 'Pretendard',
+                                                  ),
+                                                  items: listItem
+                                                      .map((String item) {
+                                                    return DropdownMenuItem<
+                                                        String>(
+                                                      value: item,
+                                                      child: Text(item),
+                                                    );
+                                                  }).toList(),
+                                                  onChanged:
+                                                      (String? newValue) {
+                                                    setState(() {
+                                                      selectedValue = newValue;
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: originalStore.length,
+                              itemBuilder: (context, index) {
+                                return newStoreContainer(originalStore[index]);
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
             IgnorePointer(
               ignoring: _isLoadingFinish,
@@ -487,6 +381,67 @@ class _DetailTouristAttractionState extends State<DetailTouristAttraction> {
                 duration: const Duration(milliseconds: 420),
                 opacity: !_isLoadingFinish ? 1.0 : 0.0,
                 child: const NewStoreShimmer(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+//---------------------------------------
+// 사진 위젯 카드
+//---------------------------------------
+
+class BuildAttractionCard extends StatelessWidget {
+  final Map<String, dynamic> serverResultData;
+
+  const BuildAttractionCard({
+    super.key,
+    required this.serverResultData,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final cardHeight = screenHeight * 0.141;
+
+    return SizedBox(
+      width: double.infinity,
+      height: cardHeight,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Stack(
+          children: [
+            Image.network(
+              serverResultData['market0'].toString(),
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: cardHeight,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  colors: [
+                    Colors.black.withOpacity(0.85555555),
+                    Colors.black.withOpacity(0.005)
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              left: 10,
+              bottom: 10,
+              child: Text(
+                '#${serverResultData['market1'][0]}',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontFamily: 'Pretendard',
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ],

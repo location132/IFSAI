@@ -64,23 +64,25 @@ class _StartPageState extends State<StartPage> {
               SizedBox(
                 width: double.infinity,
                 height: 50,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/LoginPage');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff6fbf8a),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: const Color(0xff6fbf8a),
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Text(
-                    '잎사이 시작하기',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w600,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/LoginPage');
+                    },
+                    child: Center(
+                      child: const Text(
+                        '잎사이 시작하기',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ),
                 ),

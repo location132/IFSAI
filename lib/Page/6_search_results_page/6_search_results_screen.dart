@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_dream/Page/6_search_results_page/search_screen_dio.dart';
+import 'package:my_dream/Page/6_search_results_page/search_result_dio/search_screen_dio.dart';
+import 'package:my_dream/coreService/Shimmer/search_results_shimmer.dart';
 import 'package:my_dream/coreService/provider.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +14,7 @@ class SearchResultsScreen extends StatefulWidget {
 class _SearchResultsScreenState extends State<SearchResultsScreen> {
   List<Map<String, dynamic>> serverResult = [];
   String _searchText = '';
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -25,6 +27,10 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
     super.didChangeDependencies();
     final searchModel = Provider.of<SearchBarModel>(context);
     if (searchModel.isUserTextController != _searchText) {
+      setState(() {
+        _isLoading = true;
+        serverResult = [];
+      });
       searchResultGetDio();
     }
   }
@@ -32,10 +38,24 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
   void searchResultGetDio() async {
     final searchModel = Provider.of<SearchBarModel>(context, listen: false);
     String newSearchText = searchModel.isUserTextController;
+
+    await Future.delayed(const Duration(milliseconds: 300));
     if (_searchText != newSearchText) {
-      print('새로운 검색어로 검색 실행: $newSearchText');
       _searchText = newSearchText;
-      serverResult = await searchResultData(newSearchText);
+      setState(() {
+        _isLoading = true;
+      });
+      try {
+        serverResult = await searchResultData(newSearchText);
+      } catch (e) {
+        serverResult = [];
+        // 오류 모달창 하빈디자이너한테 말하기
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+
       setState(() {});
     }
   }
@@ -47,85 +67,136 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    return Padding(
-      padding: EdgeInsets.only(
-          left: screenWidth * 0.041, right: screenWidth * 0.041),
-      child: Column(
-        children: [
-          Container(
-            height: screenHeight * 0.06,
-            decoration: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: Color(0xfff5f5f5), width: 2),
-              ),
-            ),
-            child: Row(
+    return Stack(
+      children: [
+        AnimatedOpacity(
+          opacity: _isLoading ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 450),
+          child: const SearchResultsShimmer(),
+        ),
+        AnimatedOpacity(
+          opacity: !_isLoading ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 450),
+          child: Padding(
+            padding: EdgeInsets.only(
+                left: screenWidth * 0.041, right: screenWidth * 0.041),
+            child: Column(
               children: [
-                // const Icon(
-                //   Icons.tune,
-                //   color: Color(0xff8e8e8e),
-                // ),
-                // const SizedBox(width: 10),
                 Container(
-                  height: screenHeight * 0.03,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: const Color(0xffdbdbdb),
-                      width: 1,
+                  height: screenHeight * 0.06,
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: Color(0xfff5f5f5), width: 2),
                     ),
-                    borderRadius: BorderRadius.circular(2),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 5),
-                    child: DropdownButton<String>(
-                      //padding: const EdgeInsets.only(top: 1, bottom: 2),
-                      underline: Container(),
-                      value: selectedValue,
-                      hint: const Text(
-                        '최신순',
+                  child: Row(
+                    children: [
+                      Container(
+                        height: screenHeight * 0.03,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(
+                            color: const Color(0xffdbdbdb),
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 5),
+                          child: DropdownButton<String>(
+                            underline: Container(),
+                            value: selectedValue,
+                            hint: const Text(
+                              '최신순',
+                            ),
+                            icon: const Icon(
+                              Icons.keyboard_arrow_down,
+                              color: Color(0xff8e8e8e),
+                              size: 20,
+                            ),
+                            style: const TextStyle(
+                              color: Color(0xff8e8e8e),
+                              fontSize: 13,
+                              fontFamily: 'Pretendard',
+                            ),
+                            items: listItem.map((String item) {
+                              return DropdownMenuItem<String>(
+                                value: item,
+                                child: Text(item),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedValue = newValue;
+                              });
+                            },
+                          ),
+                        ),
                       ),
-                      icon: const Icon(
-                        Icons.keyboard_arrow_down,
-                        color: Color(0xff8e8e8e),
-                        size: 20,
-                      ),
-                      style: const TextStyle(
-                        color: Color(0xff8e8e8e),
-                        fontSize: 13,
-                        fontFamily: 'Pretendard',
-                      ),
-                      items: listItem.map((String item) {
-                        return DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(item),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedValue = newValue;
-                        });
-                      },
-                    ),
+                    ],
                   ),
                 ),
+                //----------------------------------
+                SizedBox(
+                  height: screenHeight * 0.006,
+                ),
+                serverResult.isNotEmpty
+                    ? SizedBox(
+                        height: screenHeight * 0.682,
+                        child: ListView.builder(
+                            itemCount: serverResult.length,
+                            itemBuilder: (context, index) {
+                              return searchCard(index);
+                            }),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            '원하는 업체가 없으신가요?',
+                            style: TextStyle(
+                              color: Color(0xff757575),
+                              fontSize: 12,
+                              fontFamily: 'Pretendard',
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, '/PartnershipRequestScreen');
+                            },
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  WidgetSpan(
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                        border: Border(
+                                            bottom: BorderSide(
+                                          color: Color(0xff757575),
+                                        )),
+                                      ),
+                                      child: const Text(
+                                        '파트너십 요청하러 가기',
+                                        style: TextStyle(
+                                          color: Color(0xff757575),
+                                          fontSize: 12,
+                                          fontFamily: 'Pretendard',
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
               ],
             ),
           ),
-          //----------------------------------
-          SizedBox(
-            height: screenHeight * 0.006,
-          ),
-          SizedBox(
-            height: screenHeight * 0.682,
-            child: ListView.builder(
-                itemCount: serverResult.length,
-                itemBuilder: (context, index) {
-                  return searchCard(index);
-                }),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

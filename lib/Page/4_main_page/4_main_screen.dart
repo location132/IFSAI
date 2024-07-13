@@ -406,7 +406,6 @@ class _MainScreenState extends State<MainScreen> {
                                         searchModelStatus.isSearchResultsScreen,
                                     maintainState:
                                         searchModelStatus.isSearchResultsScreen,
-                                    //child: const SearchResultsShimmer(),
                                     child: const SearchResultsScreen(),
                                   ),
                                 ],

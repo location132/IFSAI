@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 //검색어 결과
-Future<List<Map<String, dynamic>>> searchResultData(keyword) async {
+Future<List<Map<String, dynamic>>> searchResultData(String keyword) async {
   List<Map<String, dynamic>> extractedData = [];
 
   Dio dio = Dio();
@@ -22,6 +22,7 @@ Future<List<Map<String, dynamic>>> searchResultData(keyword) async {
     var response = await dio.get(url, queryParameters: requestData);
 
     if (response.statusCode == 200) {
+      print(response.data);
       List<dynamic> market = response.data;
 
       for (var market in market) {
