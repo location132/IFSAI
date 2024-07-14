@@ -16,6 +16,7 @@ class _MainTouristAttractionsState extends State<MainTouristAttractions> {
   List<Map<String, dynamic>> serverResult = [];
 
   bool _isFinish = false;
+  int _finishCount = 0;
 
   @override
   void initState() {
@@ -26,71 +27,94 @@ class _MainTouristAttractionsState extends State<MainTouristAttractions> {
   void attractionsGetDio() async {
     serverResult = await mainScreenTourism();
     _isFinish = true;
-    widget.onLoadingComplete();
     setState(() {});
+  }
+
+  void loadFinish(int finish) {
+    if (finish == 4) {
+      widget.onLoadingComplete();
+    }
+  }
+
+  void _incrementFinishCount() {
+    setState(() {
+      _finishCount++;
+      loadFinish(_finishCount);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              '000님만을 위한 추천 관광명소',
-              style: TextStyle(
-                color: Color(0xff111111),
-                fontSize: 18,
-                fontFamily: 'Pretendard',
-                fontWeight: FontWeight.w600,
+    return _isFinish
+        ? Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  const Text(
+                    '000님만을 위한 추천 관광명소',
+                    style: TextStyle(
+                      color: Color(0xff111111),
+                      fontSize: 18,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const Spacer(),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/DetailTouristAttraction');
+                    },
+                    child: const Text(
+                      '전체보기',
+                      style: TextStyle(
+                        color: Color(0xff8e8e8e),
+                        fontSize: 12,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  const Icon(
+                    Icons.keyboard_arrow_right,
+                    color: Color(0xff8e8e8e),
+                    size: 16,
+                  )
+                ],
               ),
-            ),
-            Spacer(),
-            InkWell(
-              onTap: () {
-                Navigator.pushNamed(context, '/DetailTouristAttraction');
-              },
-              child: const Text(
-                '전체보기',
-                style: TextStyle(
-                  color: Color(0xff8e8e8e),
-                  fontSize: 12,
-                  fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            Icon(
-              Icons.keyboard_arrow_right,
-              color: Color(0xff8e8e8e),
-              size: 16,
-            )
-          ],
-        ),
-        const SizedBox(height: 10),
-        _isFinish
-            ? Column(
+              const SizedBox(height: 10),
+              Column(
                 children: [
                   Row(
                     children: [
-                      BuildAttractionCard(serverResultData: serverResult[0]),
+                      BuildAttractionCard(
+                          serverResultData: serverResult[0],
+                          onLoadingComplete: _incrementFinishCount),
                       const SizedBox(width: 14), // 간격 추가
-                      BuildAttractionCard(serverResultData: serverResult[1]),
+                      BuildAttractionCard(
+                        serverResultData: serverResult[1],
+                        onLoadingComplete: _incrementFinishCount,
+                      ),
                     ],
                   ),
                   const SizedBox(height: 14),
                   Row(
                     children: [
-                      BuildAttractionCard(serverResultData: serverResult[2]),
+                      BuildAttractionCard(
+                        serverResultData: serverResult[2],
+                        onLoadingComplete: _incrementFinishCount,
+                      ),
                       const SizedBox(width: 14), // 간격 추가
-                      BuildAttractionCard(serverResultData: serverResult[3]),
+                      BuildAttractionCard(
+                        serverResultData: serverResult[3],
+                        onLoadingComplete: _incrementFinishCount,
+                      ),
                     ],
                   ),
                 ],
               )
-            : const SizedBox(),
-      ],
-    );
+            ],
+          )
+        : const SizedBox();
   }
 }
