@@ -1,5 +1,8 @@
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:my_dream/Page/2_login_page/login_dio/login_dio.dart';
 
 //신규스토어
 Future<List<Map<String, dynamic>>> mainScreenNewStore() async {
@@ -141,7 +144,7 @@ Future<List<Map<String, dynamic>>> mainScreenTourism() async {
         Map<String, dynamic> data = {
           'market0': place['imageUrl'],
           'market1': place['tags'],
-          'market2': place['description']
+          'market2': place['introduce']
         };
 
         extractedData.add(data);
@@ -206,8 +209,17 @@ Future<List<Map<String, dynamic>>> mainScreenQuest() async {
   List<Map<String, dynamic>> extractedData = [];
 
   Dio dio = Dio();
+  var cookieJar = CookieJar();
+  dio.interceptors.add(CookieManager(cookieJar));
 
   var url = '${dotenv.env['API_URL']}/v1/missions';
+
+  String? token = await storage.read(key: 'accessToken');
+
+  if (token != null) {
+    List<Cookie> cookies = [Cookie('accessToken', token)];
+    cookieJar.saveFromResponse(Uri.parse(url), cookies);
+  }
 
   try {
     var response = await dio.get(url);
@@ -217,10 +229,17 @@ Future<List<Map<String, dynamic>>> mainScreenQuest() async {
 
       for (var market in market) {
         Map<String, dynamic> data = {
-          'initWeight': market['initWeight'], // 초기 가중치
-          'increaseWeight': market['increaseWeight'], // 필요한 가중치
+          'level': market['level'], // 현재 레벨
+          // 'initWeight': market['initWeight'], // 초기 가중치
+          'expValue': market['expValue'], // 내 진행도
+          'weight_previousLevel': market['weight_previousLevel'], // 이전 레벨의 가중치
           'weight_currentLevel': market['weight_currentLevel'], // 현재 레벨의 가중치
-          'weight_nextLevel': market['weight_nextLevel'], // 다음 레벨로 가기 위한 가증치
+          'weight_nextLevel': market['weight_nextLevel'], // 다음 레벨의 가증치
+          'gainExp_previousLevel':
+              market['gainExp_previousLevel'], // 이전 레벨에서 주는 경험치
+          'gainExp_currentLevel':
+              market['gainExp_currentLevel'], // 현재 레벨에서 주는 경험치
+          'gainExp_nextLevel': market['gainExp_nextLevel'], // 다음 레벨에서 주는 경험치
           'message': market['message'], // 미션 내용
         };
         extractedData.add(data);
@@ -230,7 +249,7 @@ Future<List<Map<String, dynamic>>> mainScreenQuest() async {
       return [];
     }
   } catch (e) {
-    print(e.toString());
+    print('${e.toString()} 이게 문제');
     return [];
   }
 }
