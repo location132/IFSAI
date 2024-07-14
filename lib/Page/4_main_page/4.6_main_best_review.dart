@@ -40,7 +40,7 @@ class _MainBestReviewState extends State<MainBestReview> {
       children: [
         Padding(
           padding: EdgeInsets.only(
-              left: screenWidth * 0.053, right: screenWidth * 0.053),
+              left: screenWidth * 0.041, right: screenWidth * 0.041),
           child: const Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [

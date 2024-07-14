@@ -91,7 +91,7 @@ class _DetailTop12State extends State<DetailTop12> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 5),
+                const SizedBox(height: 3),
                 Text(
                   serverResult[number]['market2'].toString(),
                   style: const TextStyle(
@@ -100,7 +100,6 @@ class _DetailTop12State extends State<DetailTop12> {
                     fontFamily: 'Pretendard',
                   ),
                 ),
-                const SizedBox(height: 1),
                 Row(
                   children: [
                     const Icon(

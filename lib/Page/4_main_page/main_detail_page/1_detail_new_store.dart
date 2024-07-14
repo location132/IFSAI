@@ -357,7 +357,7 @@ class _DetailNewStoreState extends State<DetailNewStore> {
                                           ),
                                         ),
                                       ),
-                                      hintText: '검색어를 입력해주세요.',
+                                      hintText: '원하는 스토어를 검색해보세요',
                                       hintStyle: const TextStyle(
                                           color: Color(0xffc1c1c1),
                                           fontFamily: 'Pretendard'),

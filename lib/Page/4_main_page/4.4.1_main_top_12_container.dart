@@ -25,16 +25,30 @@ class _Top6State extends State<Top12> {
             children: [
               SizedBox(
                 width: widget.number < 10 ? 13 : 20,
-                child: Text(
-                  widget.number.toString(),
-                  softWrap: false,
-                  style: const TextStyle(
-                    color: Color(0xff282828),
-                    fontSize: 20,
-                    fontFamily: 'Pretendard',
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                child: widget.number < 4
+                    ?
+                    // 처음 페이지 (1~3)
+                    Text(
+                        widget.number.toString(),
+                        softWrap: false,
+                        style: const TextStyle(
+                          color: Color(0xff282828),
+                          fontSize: 22,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )
+                    // 처음 페이지가 아니라면 (4~12)
+                    : Text(
+                        widget.number.toString(),
+                        softWrap: false,
+                        style: const TextStyle(
+                          color: Color(0xFFC1C1C1),
+                          fontSize: 20,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
               ),
               SizedBox(
                   width: widget.number < 10
@@ -73,7 +87,7 @@ class _Top6State extends State<Top12> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(height: 7),
+                    const SizedBox(height: 3),
                     Text(
                       widget.serverResultData[0]['market2'].toString(),
                       style: const TextStyle(
@@ -81,7 +95,6 @@ class _Top6State extends State<Top12> {
                         fontFamily: 'Pretendard',
                       ),
                     ),
-                    const SizedBox(height: 3),
                     Row(
                       children: [
                         const Icon(
@@ -123,15 +136,30 @@ class _Top6State extends State<Top12> {
             children: [
               SizedBox(
                 width: widget.number < 10 ? 13 : 20,
-                child: Text(
-                  (widget.number + 1).toString(),
-                  style: const TextStyle(
-                    color: Color(0xff282828),
-                    fontSize: 20,
-                    fontFamily: 'Pretendard',
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                child: widget.number < 4
+                    ?
+                    // 처음 페이지 (1~3)
+                    Text(
+                        (widget.number + 1).toString(),
+                        softWrap: false,
+                        style: const TextStyle(
+                          color: Color(0xff282828),
+                          fontSize: 22,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )
+                    // 처음 페이지가 아니라면 (4~12)
+                    : Text(
+                        (widget.number + 1).toString(),
+                        softWrap: false,
+                        style: const TextStyle(
+                          color: Color(0xFFC1C1C1),
+                          fontSize: 20,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
               ),
               SizedBox(
                   width: widget.number < 10
@@ -169,7 +197,7 @@ class _Top6State extends State<Top12> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(height: 7),
+                    const SizedBox(height: 3),
                     Text(
                       widget.serverResultData[1]['market2'].toString(),
                       style: const TextStyle(
@@ -177,7 +205,6 @@ class _Top6State extends State<Top12> {
                         fontFamily: 'Pretendard',
                       ),
                     ),
-                    const SizedBox(height: 3),
                     Row(
                       children: [
                         const Icon(
@@ -219,15 +246,30 @@ class _Top6State extends State<Top12> {
             children: [
               SizedBox(
                 width: widget.number < 10 ? 13 : 21,
-                child: Text(
-                  (widget.number + 2).toString(),
-                  style: const TextStyle(
-                    color: Color(0xff282828),
-                    fontSize: 20,
-                    fontFamily: 'Pretendard',
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                child: widget.number < 4
+                    ?
+                    // 처음 페이지 (1~3)
+                    Text(
+                        (widget.number + 2).toString(),
+                        softWrap: false,
+                        style: const TextStyle(
+                          color: Color(0xff282828),
+                          fontSize: 22,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )
+                    // 처음 페이지가 아니라면 (4~12)
+                    : Text(
+                        (widget.number + 2).toString(),
+                        softWrap: false,
+                        style: const TextStyle(
+                          color: Color(0xFFC1C1C1),
+                          fontSize: 20,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
               ),
               SizedBox(
                   width: widget.number < 10
@@ -265,7 +307,7 @@ class _Top6State extends State<Top12> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(height: 7),
+                    const SizedBox(height: 3),
                     Text(
                       widget.serverResultData[2]['market2'].toString(),
                       style: const TextStyle(
@@ -273,7 +315,6 @@ class _Top6State extends State<Top12> {
                         fontFamily: 'Pretendard',
                       ),
                     ),
-                    const SizedBox(height: 3),
                     Row(
                       children: [
                         const Icon(

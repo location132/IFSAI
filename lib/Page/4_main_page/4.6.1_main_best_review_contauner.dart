@@ -65,12 +65,11 @@ class _BestReview3State extends State<BestReview3> {
           ),
         ),
         Expanded(
-          // SizedBox 대신 Expanded 사용
           child: Padding(
             padding: const EdgeInsets.only(left: 10, top: 10, right: 15),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start, // 내용을 왼쪽 정렬
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
@@ -97,7 +96,6 @@ class _BestReview3State extends State<BestReview3> {
                       ),
                     ),
                     Expanded(
-                      // 이것은 이미 올바르게 사용되고 있음
                       child: Text(
                         newText,
                         textAlign: TextAlign.right,
