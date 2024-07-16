@@ -1,8 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:my_dream/coreService/provider.dart';
-import 'package:provider/provider.dart';
 
 class QuestForGuest extends StatefulWidget {
   const QuestForGuest({super.key});
@@ -307,13 +305,7 @@ class _QuestForGuestState extends State<QuestForGuest> {
                             ),
                             InkWell(
                                 onTap: () {
-                                  final loginState = Provider.of<LoginModel>(
-                                          context,
-                                          listen: false)
-                                      .loginStatus;
-                                  print(loginState);
-
-                                  //Navigator.pushNamed(context, '/LoginPage');
+                                  Navigator.pushNamed(context, '/LoginPage');
                                 },
                                 child: const Text(
                                   '로그인하러가기',

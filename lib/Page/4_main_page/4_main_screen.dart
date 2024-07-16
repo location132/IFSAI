@@ -582,9 +582,13 @@ class _MainScreenState extends State<MainScreen> {
                                           print('로그아웃 임시');
                                           ifsaiLogout();
                                           searchModelStatus
-                                              .setFirstTabStatus(false);
+                                              .setFirstTabStatus(true);
                                           loginModelStatus
                                               .setloginStatus(false);
+                                          loginModelStatus
+                                              .setIsFirstClickSNSLogin(true);
+                                          loginModelStatus
+                                              .setOnProfileImageReceived('');
                                           Navigator.pushNamed(
                                               context, '/StartPage');
                                         },

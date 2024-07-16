@@ -23,7 +23,6 @@ class _MainQuestState extends State<MainQuest> {
   @override
   void initState() {
     super.initState();
-    loginState = Provider.of<LoginModel>(context, listen: false).loginStatus;
     questGetDio();
   }
 
@@ -33,9 +32,11 @@ class _MainQuestState extends State<MainQuest> {
     final loginstatus = Provider.of<LoginModel>(context);
     if (loginstatus.loginStatus) {
       loginState = loginstatus.loginStatus;
+      questGetDio();
       setState(() {});
     } else {
       loginState = loginstatus.loginStatus;
+      serverResult = [];
       setState(() {});
     }
   }

@@ -21,7 +21,7 @@ class _MainScreenState extends State<MainSearchBarScreen> {
   bool _showNotificationIcon = true;
   String _saveSearchController = '';
   List<Map<String, dynamic>> searchDio = [];
-  String profileImageUrl = '';
+  String? _profileImageUrl;
 
   @override
   void initState() {
@@ -30,8 +30,6 @@ class _MainScreenState extends State<MainSearchBarScreen> {
       final searchModel = Provider.of<SearchBarModel>(context, listen: false);
       searchModel.addListener(_updateTextController);
     });
-    final loginStatus = Provider.of<LoginModel>(context, listen: false);
-    profileImageUrl = loginStatus.onProfileImageReceived;
   }
 
   @override
@@ -39,7 +37,6 @@ class _MainScreenState extends State<MainSearchBarScreen> {
     super.didChangeDependencies();
 
     final searchModel = Provider.of<SearchBarModel>(context);
-
     if (searchModel.isFirstTab == true && !_showNotificationIcon) {
       if (mounted) {
         setState(() {
@@ -149,7 +146,6 @@ class _MainScreenState extends State<MainSearchBarScreen> {
     final searchModel = Provider.of<SearchBarModel>(context);
     final screenWidth = MediaQuery.of(context).size.width;
     final loginStatus = Provider.of<LoginModel>(context, listen: false);
-
     return Row(
       children: [
         loginStatus.loginStatus
@@ -162,29 +158,22 @@ class _MainScreenState extends State<MainSearchBarScreen> {
                   opacity: searchModel.isFirstTab ? 1.0 : 0.0,
                   child: Stack(
                     children: [
-                      profileImageUrl.isEmpty
-                          ? Container(
-                              height: 40,
-                              width: 40,
-                              decoration: const BoxDecoration(
-                                color: Color(0xffd9d9d9),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
+                      Container(
+                        height: 40,
+                        width: 40,
+                        decoration: const BoxDecoration(
+                          color: Color(0xffd9d9d9),
+                          shape: BoxShape.circle,
+                        ),
+                        child: (_profileImageUrl == null ||
+                                _profileImageUrl.toString().isEmpty)
+                            ? const Icon(
                                 Icons.person,
                                 size: 32,
                                 color: Colors.white,
-                              ),
-                            )
-                          : Container(
-                              height: 40,
-                              width: 40,
-                              decoration: const BoxDecoration(
-                                color: Color(0xffd9d9d9),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Image.network(profileImageUrl),
-                            ),
+                              )
+                            : Image.network(_profileImageUrl!),
+                      )
                     ],
                   ),
                 ),
