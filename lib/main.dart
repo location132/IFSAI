@@ -32,6 +32,7 @@ void main() async {
   // API URL 환경 변수 가져오기
   String apiUrl = dotenv.env['API_URL']!;
   KakaoSdk.init(nativeAppKey: dotenv.env['KAKAO_APP_KEY']!);
+  String urlImg = '';
 
   bool isTokenValid = false;
   const storage = FlutterSecureStorage();
@@ -39,6 +40,10 @@ void main() async {
   bool isLoggedIn = accessToken != null;
   if (isLoggedIn) {
     isTokenValid = await acconutsTK();
+    if (isTokenValid) {
+      var roleResult = await patchRoleSendSever(); // 프로필 조회
+      urlImg = roleResult['image'].toString();
+    }
   }
 
   runApp(
@@ -48,15 +53,20 @@ void main() async {
         ChangeNotifierProvider(create: (_) => SearchBarModel()),
         ChangeNotifierProvider(create: (_) => SearchScreenModel()),
       ],
-      child: MyApp(isLoggedIn: isTokenValid, apiUrl: apiUrl),
+      child: MyApp(isLoggedIn: isTokenValid, apiUrl: apiUrl, urlImg: urlImg),
     ),
   );
 }
 
 class MyApp extends StatefulWidget {
   final bool isLoggedIn;
-  const MyApp({super.key, required this.isLoggedIn, required String apiUrl});
-
+  final String urlImg;
+  final String apiUrl;
+  const MyApp(
+      {super.key,
+      required this.isLoggedIn,
+      required this.apiUrl,
+      required this.urlImg});
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -74,6 +84,7 @@ class _MyAppState extends State<MyApp> {
     final loginStatus = Provider.of<LoginModel>(context, listen: false);
     if (widget.isLoggedIn) {
       loginStatus.setloginStatus(true);
+      loginStatus.setOnProfileImageReceived(widget.urlImg);
     } else {
       loginStatus.setloginStatus(false);
     }

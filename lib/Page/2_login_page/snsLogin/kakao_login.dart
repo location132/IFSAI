@@ -39,6 +39,8 @@ class _KakaoLoginState extends State<KakaoLogin> {
         if (result['status'] == 'success') {
           loginModel.setloginStatus(true);
           var roleResult = await patchRoleSendSever();
+          loginModel.setOnProfileImageReceived(roleResult['image'].toString());
+
           if (roleResult['status'] == 'students') {
             // 학생인증을 예전에 완료했을 시,
             userIsStudents();
@@ -68,6 +70,9 @@ class _KakaoLoginState extends State<KakaoLogin> {
             loginModel.setloginStatus(true);
 
             var roleResult = await patchRoleSendSever();
+            loginModel
+                .setOnProfileImageReceived(roleResult['image'].toString());
+
             if (roleResult['status'] == 'students') {
               // 학생인증을 예전에 완료했을 시,
               userIsStudents();
@@ -95,6 +100,8 @@ class _KakaoLoginState extends State<KakaoLogin> {
         if (result['status'] == 'success') {
           loginModel.setloginStatus(true);
           var roleResult = await patchRoleSendSever();
+          loginModel.setOnProfileImageReceived(roleResult['image'].toString());
+
           if (roleResult['status'] == 'students') {
             // 학생인증을 예전에 완료했을 시,
 

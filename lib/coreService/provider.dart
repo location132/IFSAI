@@ -9,6 +9,7 @@ class LoginModel with ChangeNotifier {
   bool _isFirstClickSNSLogin = true;
   // 사용자가 처음으로 sns 로그인을 클릭 (로그인 중 다른 sns버튼 클릭시 2개 로그인 되는 현상 버그)
   bool _istryEmailCode = false; // 인증번호 입력 키보드 올리기
+  String _onProfileImageReceived = ''; // 사용자 프로필 이미지
 
   bool get loginStatus => _loginStatus;
   bool get isEmailState => _isEmailState;
@@ -16,6 +17,7 @@ class LoginModel with ChangeNotifier {
   String get isUserEmail => _isUserEmail;
   bool get isFirstClickSNSLogin => _isFirstClickSNSLogin;
   bool get istryEmailCode => _istryEmailCode;
+  String get onProfileImageReceived => _onProfileImageReceived;
 
   void setloginStatus(bool loginStatus) {
     _loginStatus = loginStatus;
@@ -44,6 +46,11 @@ class LoginModel with ChangeNotifier {
 
   void setIstryEmailCode(bool istryEmailCode) {
     _istryEmailCode = istryEmailCode;
+    notifyListeners();
+  }
+
+  void setOnProfileImageReceived(String profileImage) {
+    _onProfileImageReceived = profileImage;
     notifyListeners();
   }
 }

@@ -42,13 +42,16 @@ class _NaverLoginState extends State<NaverLogin> {
         // 네이버 로그인 성공
         loginModel.setloginStatus(true);
         var roleResult = await patchRoleSendSever(); // 프로필 조회
+        loginModel.setOnProfileImageReceived(roleResult['image'].toString());
 
         if (roleResult['status'] == 'students') {
           // 학생인증을 예전에 완료했을 시,
+
           _offIndicator();
           userIsStudents();
         } else if (roleResult['status'] == 'not students') {
           // 학생인증이 안되어있을 시,
+
           _offIndicator();
           userIsNotStudents();
         }

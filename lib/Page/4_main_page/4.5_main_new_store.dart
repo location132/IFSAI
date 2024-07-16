@@ -191,10 +191,14 @@ class _MainNewStoreState extends State<MainNewStore> {
                   ),
                 ),
               ),
-              const Icon(
-                Icons.keyboard_arrow_right,
-                color: Color(0xff8e8e8e),
-                size: 16,
+              const SizedBox(
+                width: 16,
+                height: 16,
+                child: Icon(
+                  Icons.keyboard_arrow_right,
+                  color: Color(0xff8e8e8e),
+                  size: 17,
+                ),
               )
             ],
           ),

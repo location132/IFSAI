@@ -263,13 +263,15 @@ Future<Map<String, dynamic>> patchRoleSendSever() async {
 
     if (response.statusCode == 200) {
       var responseData = response.data;
-      print(responseData);
 
       bool isStudents = responseData['role'].toString().toUpperCase() == '학생';
       if (isStudents) {
-        return {'status': 'students'};
+        return {'status': 'students', 'image': responseData['profileImage']};
       } else {
-        return {'status': 'not students'};
+        return {
+          'status': 'not students',
+          'image': responseData['profileImage']
+        };
       }
     } else {
       return {'status': 'is Sever Error'};

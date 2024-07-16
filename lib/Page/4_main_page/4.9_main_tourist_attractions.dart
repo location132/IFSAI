@@ -16,7 +16,6 @@ class _MainTouristAttractionsState extends State<MainTouristAttractions> {
   List<Map<String, dynamic>> serverResult = [];
 
   bool _isFinish = false;
-  int _finishCount = 0;
 
   @override
   void initState() {
@@ -26,21 +25,11 @@ class _MainTouristAttractionsState extends State<MainTouristAttractions> {
 
   void attractionsGetDio() async {
     serverResult = await mainScreenTourism();
+    widget.onLoadingComplete();
+
     _isFinish = true;
+
     setState(() {});
-  }
-
-  void loadFinish(int finish) {
-    if (finish == 4) {
-      widget.onLoadingComplete();
-    }
-  }
-
-  void _incrementFinishCount() {
-    setState(() {
-      _finishCount++;
-      loadFinish(_finishCount);
-    });
   }
 
   @override
@@ -88,12 +77,11 @@ class _MainTouristAttractionsState extends State<MainTouristAttractions> {
                   Row(
                     children: [
                       BuildAttractionCard(
-                          serverResultData: serverResult[0],
-                          onLoadingComplete: _incrementFinishCount),
+                        serverResultData: serverResult[0],
+                      ),
                       const SizedBox(width: 14), // 간격 추가
                       BuildAttractionCard(
                         serverResultData: serverResult[1],
-                        onLoadingComplete: _incrementFinishCount,
                       ),
                     ],
                   ),
@@ -102,12 +90,10 @@ class _MainTouristAttractionsState extends State<MainTouristAttractions> {
                     children: [
                       BuildAttractionCard(
                         serverResultData: serverResult[2],
-                        onLoadingComplete: _incrementFinishCount,
                       ),
                       const SizedBox(width: 14), // 간격 추가
                       BuildAttractionCard(
                         serverResultData: serverResult[3],
-                        onLoadingComplete: _incrementFinishCount,
                       ),
                     ],
                   ),

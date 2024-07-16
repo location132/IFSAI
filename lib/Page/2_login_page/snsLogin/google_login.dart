@@ -30,19 +30,23 @@ class _GoogleLoginState extends State<GoogleLogin> {
             await googleUser.authentication;
         String accessToken = googleAuth.accessToken!;
         var result = await snsLogin('GOOGLE', accessToken);
-        await Future.delayed(const Duration(seconds: 2));
         if (result['status'] == 'success') {
           loginModel.setloginStatus(true);
+          var roleResult = await patchRoleSendSever(); // 프로필 조회
+          loginModel.setOnProfileImageReceived(roleResult['image'].toString());
 
-          setState(() {
-            widget.isLoading(false);
-          });
-          await Future.delayed(const Duration(seconds: 1));
-          if (mounted) {
-            Navigator.pushNamedAndRemoveUntil(context, '/StudentIdentityCheck',
-                (Route<dynamic> route) => false);
+          if (roleResult['status'] == 'students') {
+            // 학생인증을 예전에 완료했을 시,
+            _offIndicator();
+            userIsStudents();
+          } else if (roleResult['status'] == 'not students') {
+            // 학생인증이 안되어있을 시,
+            _offIndicator();
+            userIsNotStudents();
           }
         } else {
+          // 서버 에러
+          await Future.delayed(const Duration(seconds: 1));
           widget.isLoading(false);
           loginModel.setIsFirstClickSNSLogin(true);
           widget.onLoginResult(false);
@@ -56,6 +60,41 @@ class _GoogleLoginState extends State<GoogleLogin> {
       widget.isLoading(false);
       loginModel.setIsFirstClickSNSLogin(true);
       widget.onLoginResult(false);
+    }
+  }
+
+  // 인디케이터 끄기
+  void _offIndicator() async {
+    setState(() {
+      widget.isLoading(false);
+    });
+    await Future.delayed(const Duration(seconds: 1));
+  }
+
+  // 해당 사용자가 학생일 떄,
+  void userIsStudents() async {
+    final loginModel = Provider.of<LoginModel>(context, listen: false);
+    setState(() {
+      widget.isLoading(false);
+    });
+    await Future.delayed(const Duration(seconds: 1));
+
+    if (mounted) {
+      Navigator.pushNamed(context, '/MainScreen');
+      loginModel.setIsFirstClickSNSLogin(false);
+    }
+  }
+
+  // 해당 사용자가 학생일 떄,
+  void userIsNotStudents() async {
+    final loginModel = Provider.of<LoginModel>(context, listen: false);
+    setState(() {
+      widget.isLoading(false);
+    });
+    await Future.delayed(const Duration(seconds: 1));
+    if (mounted) {
+      Navigator.pushNamed(context, '/StudentIdentityCheck');
+      loginModel.setIsFirstClickSNSLogin(false);
     }
   }
 

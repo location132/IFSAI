@@ -40,6 +40,7 @@ class _DetailNewStoreState extends State<DetailNewStore> {
   Widget newStoreContainer(Map<String, dynamic> store) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+    print(screenWidth * 0.12);
 
     return Column(
       children: [
@@ -53,11 +54,11 @@ class _DetailNewStoreState extends State<DetailNewStore> {
                 height: screenHeight * 0.125,
                 decoration: ShapeDecoration(
                   gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
+                    begin: Alignment.bottomLeft,
+                    end: Alignment.topRight,
                     colors: [
-                      const Color(0x0c000000).withOpacity(0.03),
-                      const Color(0x0c000000).withOpacity(0.03),
+                      const Color(0x0c000000).withOpacity(0.01),
+                      const Color(0x0c000000).withOpacity(0.01),
                     ],
                   ),
                   shape: RoundedRectangleBorder(
@@ -117,7 +118,7 @@ class _DetailNewStoreState extends State<DetailNewStore> {
                                         child: RichText(
                                           overflow: TextOverflow.ellipsis,
                                           text: TextSpan(
-                                            children: [
+                                            children: <InlineSpan>[
                                               TextSpan(
                                                 text: store['market1'],
                                                 style: const TextStyle(
@@ -127,8 +128,9 @@ class _DetailNewStoreState extends State<DetailNewStore> {
                                                   fontWeight: FontWeight.w600,
                                                 ),
                                               ),
-                                              const TextSpan(
-                                                text: '   ',
+                                              WidgetSpan(
+                                                child: SizedBox(
+                                                    width: screenWidth * 0.012),
                                               ),
                                               TextSpan(
                                                 text:
@@ -136,7 +138,8 @@ class _DetailNewStoreState extends State<DetailNewStore> {
                                                 style: const TextStyle(
                                                   color: Color(0xff6fbf8a),
                                                   fontSize: 12,
-                                                  fontFamily: 'Pretendard',
+                                                  fontFamily:
+                                                      'PretendardSemiBold',
                                                   fontWeight: FontWeight.w500,
                                                 ),
                                               ),
@@ -146,7 +149,7 @@ class _DetailNewStoreState extends State<DetailNewStore> {
                                       )
                                     ],
                                   ),
-                                  SizedBox(height: screenWidth * 0.008),
+                                  SizedBox(height: screenWidth * 0.01),
                                   Text(
                                     store['market2'],
                                     maxLines: 3,
@@ -157,7 +160,7 @@ class _DetailNewStoreState extends State<DetailNewStore> {
                                       fontFamily: 'Pretendard',
                                     ),
                                   ),
-                                  SizedBox(height: screenWidth * 0.014),
+                                  SizedBox(height: screenWidth * 0.009),
                                   SizedBox(
                                     width: screenWidth * 0.7,
                                     child: Text(
@@ -170,12 +173,12 @@ class _DetailNewStoreState extends State<DetailNewStore> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(height: screenWidth * 0.008),
+                                  SizedBox(height: screenWidth * 0.009),
                                   const Divider(
                                     height: 1,
                                     color: Color(0xfff5f5f5),
                                   ),
-                                  SizedBox(height: screenWidth * 0.008),
+                                  SizedBox(height: screenWidth * 0.013),
                                   SizedBox(
                                     width: screenWidth * 0.7,
                                     child: Text(
@@ -183,11 +186,12 @@ class _DetailNewStoreState extends State<DetailNewStore> {
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
                                         color: Color(0xfff64f4f),
-                                        fontSize: 12,
-                                        fontFamily: 'Pretendard',
+                                        fontSize: 10,
+                                        fontFamily: 'PretendardSemiBold',
                                       ),
                                     ),
                                   ),
+                                  SizedBox(height: screenWidth * 0.02),
                                 ],
                               ),
                             ),
@@ -198,6 +202,7 @@ class _DetailNewStoreState extends State<DetailNewStore> {
                         top: 10,
                         child: Container(
                           height: 18,
+                          width: 39,
                           decoration: const BoxDecoration(
                             color: Color(0xff6fbf8a),
                           ),
@@ -208,7 +213,7 @@ class _DetailNewStoreState extends State<DetailNewStore> {
                                 'NEW',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 8,
+                                  fontSize: 12,
                                   fontFamily: 'Pretendard',
                                   fontWeight: FontWeight.w600,
                                 ),

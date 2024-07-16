@@ -21,6 +21,7 @@ class _MainScreenState extends State<MainSearchBarScreen> {
   bool _showNotificationIcon = true;
   String _saveSearchController = '';
   List<Map<String, dynamic>> searchDio = [];
+  String profileImageUrl = '';
 
   @override
   void initState() {
@@ -29,6 +30,29 @@ class _MainScreenState extends State<MainSearchBarScreen> {
       final searchModel = Provider.of<SearchBarModel>(context, listen: false);
       searchModel.addListener(_updateTextController);
     });
+    final loginStatus = Provider.of<LoginModel>(context, listen: false);
+    profileImageUrl = loginStatus.onProfileImageReceived;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final searchModel = Provider.of<SearchBarModel>(context);
+
+    if (searchModel.isFirstTab == true && !_showNotificationIcon) {
+      if (mounted) {
+        setState(() {
+          _showNotificationIcon = true;
+        });
+      }
+    }
+
+    if (!searchModel.isSearchResultsScreen) {
+      _textController.text = '';
+    } else {
+      _textController.text = _saveSearchController;
+    }
   }
 
   void _updateTextController() {
@@ -38,7 +62,6 @@ class _MainScreenState extends State<MainSearchBarScreen> {
         _textController.text = searchModel.isUserTextController;
         _saveSearchController = searchModel.isUserTextController;
       });
-      // searchModel.setSearchController(''); // 검색기록 릿세
     }
   }
 
@@ -125,34 +148,54 @@ class _MainScreenState extends State<MainSearchBarScreen> {
   Widget build(BuildContext context) {
     final searchModel = Provider.of<SearchBarModel>(context);
     final screenWidth = MediaQuery.of(context).size.width;
-
-    if (searchModel.isFirstTab == true && !_showNotificationIcon) {
-      Future.delayed(const Duration(milliseconds: 350), () {
-        setState(() {
-          _showNotificationIcon = true;
-        });
-      });
-    }
-
-    if (mounted) {
-      if (!searchModel.isSearchResultsScreen) {
-        setState(() {
-          _textController.text = '';
-        });
-      } else {
-        setState(() {
-          _textController.text = _saveSearchController;
-        });
-      }
-    }
+    final loginStatus = Provider.of<LoginModel>(context, listen: false);
 
     return Row(
       children: [
+        loginStatus.loginStatus
+            ? AnimatedContainer(
+                duration: const Duration(milliseconds: 350),
+                curve: Curves.easeInOut,
+                width: searchModel.isFirstTab ? 56 : 0,
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 300),
+                  opacity: searchModel.isFirstTab ? 1.0 : 0.0,
+                  child: Stack(
+                    children: [
+                      profileImageUrl.isEmpty
+                          ? Container(
+                              height: 40,
+                              width: 40,
+                              decoration: const BoxDecoration(
+                                color: Color(0xffd9d9d9),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.person,
+                                size: 32,
+                                color: Colors.white,
+                              ),
+                            )
+                          : Container(
+                              height: 40,
+                              width: 40,
+                              decoration: const BoxDecoration(
+                                color: Color(0xffd9d9d9),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Image.network(profileImageUrl),
+                            ),
+                    ],
+                  ),
+                ),
+              )
+            : const SizedBox(),
         Expanded(
           child: Stack(
             children: [
               AnimatedContainer(
-                duration: const Duration(milliseconds: 400),
+                duration: const Duration(milliseconds: 350),
+                curve: Curves.easeInOut,
                 height: 40,
                 width: searchModel.isFirstTab
                     ? screenWidth * 0.823
@@ -196,17 +239,21 @@ class _MainScreenState extends State<MainSearchBarScreen> {
                 ),
               ),
               if (searchModel.isFirstTab)
-                SizedBox(
-                  height: 40,
-                  child: TextButton(
-                    onPressed: () {
-                      _toggleBottomSheet();
-                    },
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      splashFactory: NoSplash.splashFactory,
+                AnimatedOpacity(
+                  duration: const Duration(milliseconds: 300),
+                  opacity: searchModel.isFirstTab ? 1.0 : 0.0,
+                  child: SizedBox(
+                    height: 40,
+                    child: TextButton(
+                      onPressed: () {
+                        _toggleBottomSheet();
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        splashFactory: NoSplash.splashFactory,
+                      ),
+                      child: Container(),
                     ),
-                    child: Container(),
                   ),
                 ),
             ],
@@ -214,14 +261,59 @@ class _MainScreenState extends State<MainSearchBarScreen> {
         ),
         const SizedBox(width: 5),
         AnimatedOpacity(
-          opacity: _showNotificationIcon ? 1 : 0,
-          duration: const Duration(milliseconds: 300),
-          child: Visibility(
-            visible: _showNotificationIcon,
-            child: const Icon(
-              Icons.notifications_none,
-              color: Color(0xff6fbf8a),
-              size: 32,
+          duration: const Duration(milliseconds: 100),
+          opacity: _showNotificationIcon ? 1.0 : 0.0,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeInOut,
+            width: _showNotificationIcon ? 32 : 0,
+            child: AnimatedOpacity(
+              opacity: _showNotificationIcon ? 1 : 0,
+              duration: const Duration(milliseconds: 350),
+              curve: Curves.easeInOut,
+              child: InkWell(
+                onTap: () {
+                  if (loginStatus.loginStatus) {
+                    // 로그인 후 로직
+                  } else {
+                    Navigator.pushNamed(context, '/LoginPage');
+                  }
+                },
+                child: const Icon(
+                  Icons.notifications_none,
+                  color: Color(0xff6fbf8a),
+                  size: 32,
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 5),
+        AnimatedOpacity(
+          duration: const Duration(milliseconds: 100),
+          opacity: _showNotificationIcon ? 1.0 : 0.0,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeInOut,
+            width: _showNotificationIcon ? 32 : 0,
+            child: AnimatedOpacity(
+              opacity: _showNotificationIcon ? 1 : 0,
+              duration: const Duration(milliseconds: 350),
+              curve: Curves.easeInOut,
+              child: InkWell(
+                onTap: () {
+                  if (loginStatus.loginStatus) {
+                    // 로그인 후 로직
+                  } else {
+                    Navigator.pushNamed(context, '/LoginPage');
+                  }
+                },
+                child: const Icon(
+                  Icons.shopping_cart_outlined,
+                  color: Color(0xff6fbf8a),
+                  size: 32,
+                ),
+              ),
             ),
           ),
         ),

@@ -253,7 +253,7 @@ class _MainScreenState extends State<MainScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final searchModelStatus = Provider.of<SearchBarModel>(context);
-    final loginModelStatus = Provider.of<SearchBarModel>(context);
+    final loginModelStatus = Provider.of<LoginModel>(context);
 
     return PopScope(
       canPop: false,
@@ -581,8 +581,10 @@ class _MainScreenState extends State<MainScreen> {
                                         onTap: () {
                                           print('로그아웃 임시');
                                           ifsaiLogout();
-                                          loginModelStatus
+                                          searchModelStatus
                                               .setFirstTabStatus(false);
+                                          loginModelStatus
+                                              .setloginStatus(false);
                                           Navigator.pushNamed(
                                               context, '/StartPage');
                                         },

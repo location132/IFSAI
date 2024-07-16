@@ -73,8 +73,8 @@ class _StartPageState extends State<StartPage> {
                     onTap: () {
                       Navigator.pushNamed(context, '/LoginPage');
                     },
-                    child: Center(
-                      child: const Text(
+                    child: const Center(
+                      child: Text(
                         '잎사이 시작하기',
                         style: TextStyle(
                           color: Colors.white,
