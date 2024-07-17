@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_dream/Page/4_main_page/4.10.1_main_quest_guest.dart';
-import 'package:my_dream/Page/4_main_page/main_detail_page/3_detail_quest.dart';
+import 'package:my_dream/Page/4_main_page/main_detail_page/4_detail_quest.dart';
 import 'package:my_dream/Page/4_main_page/main_dio/main_screen_dio.dart';
 import 'package:my_dream/coreService/provider.dart';
 import 'package:provider/provider.dart';
