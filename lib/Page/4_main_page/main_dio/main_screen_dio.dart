@@ -123,14 +123,14 @@ Future<List<Map<String, dynamic>>> mainScreenBestReviews() async {
 }
 
 //메인화면 관광 명소
-Future<List<Map<String, dynamic>>> mainScreenTourism() async {
+Future<List<Map<String, dynamic>>> mainScreenTourism(int size) async {
   Dio dio = Dio();
   var url = '${dotenv.env['API_URL']}/v1/attractions';
   List<Map<String, dynamic>> extractedData = [];
 
   Map<String, dynamic> data = {
     'page': 0,
-    'size': 4,
+    'size': size,
     'sort': ['String']
   };
 
@@ -144,7 +144,8 @@ Future<List<Map<String, dynamic>>> mainScreenTourism() async {
         Map<String, dynamic> data = {
           'market0': place['imageUrl'],
           'market1': place['tags'],
-          'market2': place['introduce']
+          'market2': place['introduce'],
+          'market3': place['title']
         };
 
         extractedData.add(data);

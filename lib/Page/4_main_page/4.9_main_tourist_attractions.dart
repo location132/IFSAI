@@ -24,7 +24,7 @@ class _MainTouristAttractionsState extends State<MainTouristAttractions> {
   }
 
   void attractionsGetDio() async {
-    serverResult = await mainScreenTourism();
+    serverResult = await mainScreenTourism(4);
     widget.onLoadingComplete();
 
     _isFinish = true;
