@@ -125,7 +125,7 @@ Future<List<Map<String, dynamic>>> mainScreenBestReviews() async {
 //메인화면 관광 명소
 Future<List<Map<String, dynamic>>> mainScreenTourism(int size) async {
   Dio dio = Dio();
-  var url = '${dotenv.env['API_URL']}/v1/attractions';
+  var url = '${dotenv.env['API_URL']}/v1/MAIN/promotions';
   List<Map<String, dynamic>> extractedData = [];
 
   Map<String, dynamic> data = {
@@ -145,7 +145,44 @@ Future<List<Map<String, dynamic>>> mainScreenTourism(int size) async {
           'market0': place['imageUrl'],
           'market1': place['tags'],
           'market2': place['introduce'],
-          'market3': place['title']
+        };
+
+        extractedData.add(data);
+      }
+
+      return extractedData;
+    } else {
+      return [];
+    }
+  } catch (e) {
+    print(e);
+    return [];
+  }
+}
+
+//전체보기 관광 명소
+Future<List<Map<String, dynamic>>> detailScreenTourism(int size) async {
+  Dio dio = Dio();
+  var url = '${dotenv.env['API_URL']}/v1/ATTRACTION/promotions';
+  List<Map<String, dynamic>> extractedData = [];
+
+  Map<String, dynamic> data = {
+    'page': 0,
+    'size': size,
+    'sort': ['String']
+  };
+
+  try {
+    var serverResult = await dio.get(url, queryParameters: data);
+
+    if (serverResult.statusCode == 200) {
+      List<dynamic> place = serverResult.data;
+
+      for (var place in place) {
+        Map<String, dynamic> data = {
+          'market0': place['imageUrl'],
+          'market1': place['tags'],
+          'market2': place['introduce'],
         };
 
         extractedData.add(data);

@@ -188,3 +188,23 @@ Future<bool> deleteSearchHistory(int historyId) async {
     return false;
   }
 }
+
+// 연관 검색어
+Future<List<String>> sendRelatedSearch(String value) async {
+  Dio dio = Dio();
+  var uri = '${dotenv.env['API_URL']}/v1/auto-complete';
+
+  Map<String, dynamic> data = {'word': value};
+
+  try {
+    var response = await dio.get(uri, queryParameters: data);
+    if (response.statusCode == 200) {
+      List<dynamic> result = response.data;
+      return result.map((item) => item['word'] as String).toList();
+    } else {
+      return [];
+    }
+  } catch (e) {
+    return [];
+  }
+}

@@ -15,17 +15,11 @@ class BannerWidget extends StatelessWidget {
     return SizedBox(
       height: height,
       width: double.infinity,
-      child: Container(
-        decoration: BoxDecoration(
-          color: const Color(0xffdbdbdb),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Image.network(
-            imagePath,
-            fit: BoxFit.cover,
-          ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(4),
+        child: Image.network(
+          imagePath,
+          fit: BoxFit.cover,
         ),
       ),
     );
