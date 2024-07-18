@@ -101,6 +101,27 @@ class SearchBarModel with ChangeNotifier {
   }
 }
 
+class SearchBarModel2 with ChangeNotifier {
+  String _userInputForRelatedSearch = ''; // 사용자 입력 (초성 포함) 연관 검색어용
+  List<String> _previousValue = []; // 이전 연관기록 저장
+
+  String get userInputForRelatedSearch => _userInputForRelatedSearch;
+  List<String> get previousValue => _previousValue;
+
+  void setUserInputForRelatedSearch(String input) {
+    _userInputForRelatedSearch = input;
+    // print(_userInputForRelatedSearch);
+    notifyListeners();
+  }
+
+  // 사용자 겁색 기록 저장
+  void previousValueHistory(
+    List<String> issevervaildate,
+  ) {
+    _previousValue = issevervaildate;
+  }
+}
+
 class SearchScreenModel with ChangeNotifier {
   List<Map<String, dynamic>>? _searchHistory; // 검색 히스토리
   List<Map<String, dynamic>>? _popularSearches; // 인기 검색어

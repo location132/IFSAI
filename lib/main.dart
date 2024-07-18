@@ -52,6 +52,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => LoginModel()),
         ChangeNotifierProvider(create: (_) => SearchBarModel()),
         ChangeNotifierProvider(create: (_) => SearchScreenModel()),
+        ChangeNotifierProvider(create: (_) => SearchBarModel2()),
       ],
       child: MyApp(isLoggedIn: isTokenValid, apiUrl: apiUrl, urlImg: urlImg),
     ),
