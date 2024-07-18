@@ -90,7 +90,9 @@ class _PartnershipRequestScreenState extends State<PartnershipRequestScreen> {
               bottom: 70,
               child: FloatingActionButton(
                 heroTag: "fab1",
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/PartnershipRequestForm');
+                },
                 backgroundColor: const Color(0xff6fbf8a),
                 shape: const CircleBorder(),
                 child: const Icon(
