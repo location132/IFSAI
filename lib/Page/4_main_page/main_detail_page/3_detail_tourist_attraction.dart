@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_dream/Page/4_main_page/main_dio/main_screen_dio.dart';
+import 'package:my_dream/coreService/Shimmer/tourist_shimmer.dart';
 import 'package:my_dream/coreService/widget/banner.dart';
 import 'package:my_dream/coreService/widget/searchbar.dart';
 
@@ -13,6 +14,7 @@ class DetailTouristAttraction extends StatefulWidget {
 
 class _DetailTouristAttractionState extends State<DetailTouristAttraction> {
   List<Map<String, dynamic>> serverResult = [];
+  List<Map<String, dynamic>> serverResult2 = [];
   bool _isLoadingFinish = false;
 
   @override
@@ -25,7 +27,8 @@ class _DetailTouristAttractionState extends State<DetailTouristAttraction> {
   String? selectedValue;
 
   void attractionsGetDio() async {
-    serverResult = await mainScreenTourism(12);
+    serverResult = await detailScreenTourism(2);
+    serverResult2 = await mainScreenTourism(12);
     setState(() {
       _isLoadingFinish = true;
     });
@@ -288,15 +291,23 @@ class _DetailTouristAttractionState extends State<DetailTouristAttraction> {
                       //----------- 리스트 뷸더------------------
                       Expanded(
                         child: ListView.builder(
-                          itemCount: serverResult.length - 2,
+                          itemCount: serverResult2.length,
                           itemBuilder: (context, index) {
-                            return newStoreContainer(serverResult[index + 2]);
+                            return newStoreContainer(serverResult2[index]);
                           },
                         ),
                       ),
                     ],
                   )
                 : const SizedBox(),
+            IgnorePointer(
+              ignoring: _isLoadingFinish,
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 600),
+                opacity: !_isLoadingFinish ? 1.0 : 0.0,
+                child: const TouristShimmer(),
+              ),
+            ),
           ],
         ),
       ),
@@ -422,18 +433,18 @@ class _DetailTouristAttractionState extends State<DetailTouristAttraction> {
                                         '#${store['market1'][0].toString()}',
                                         maxLines: 3,
                                         overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color: Color(0xff5b5b5b),
                                           fontSize: 12,
                                           fontFamily: 'Pretendard',
                                         ),
                                       ),
-                                      SizedBox(width: 6),
+                                      const SizedBox(width: 6),
                                       Text(
                                         '#${store['market1'][1].toString()}',
                                         maxLines: 3,
                                         overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color: Color(0xff5b5b5b),
                                           fontSize: 12,
                                           fontFamily: 'Pretendard',
