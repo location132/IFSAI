@@ -3,6 +3,7 @@ import 'package:my_dream/Page/5_search_page/search_dio/search_screen_dio.dart';
 import 'package:my_dream/coreService/Sharedpreferences.dart';
 import 'package:my_dream/coreService/provider.dart';
 import 'package:provider/provider.dart';
+import 'package:my_dream/coreService/Dialog/login_dialog.dart';
 
 class MainSearchBarScreen extends StatefulWidget {
   final Function(bool) searchScreen;
@@ -22,6 +23,7 @@ class _MainScreenState extends State<MainSearchBarScreen> {
   String _saveSearchController = '';
   List<Map<String, dynamic>> searchDio = [];
   String? _profileImageUrl;
+  String _inputText = '';
 
   @override
   void initState() {
@@ -125,6 +127,19 @@ class _MainScreenState extends State<MainSearchBarScreen> {
     await getDioSearchValue();
   }
 
+  // Dialog, 유저 미로그인상태, 로그인 필요한 페이지 접근 시도시 발생(noti, cart)
+  void handleLogin() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Colors.black.withOpacity(0.5),
+      builder: (BuildContext context) {
+        return LoginDialog();
+      },
+    );
+  }
+
+
   Future<void> getDioSearchValue() async {
     bool loginState =
         Provider.of<LoginModel>(context, listen: false).loginStatus;
@@ -141,9 +156,15 @@ class _MainScreenState extends State<MainSearchBarScreen> {
     }
   }
 
+  //연관검색어
+  void updateSearchScreenState() {
+    final searchModel = Provider.of<SearchBarModel2>(context, listen: false);
+    searchModel.setUserInputForRelatedSearch(_inputText);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final searchModel = Provider.of<SearchBarModel>(context);
+    final searchModel = Provider.of<SearchBarModel>(context, listen: false);
     final screenWidth = MediaQuery.of(context).size.width;
     final loginStatus = Provider.of<LoginModel>(context, listen: false);
     return Row(
@@ -220,6 +241,10 @@ class _MainScreenState extends State<MainSearchBarScreen> {
                       borderSide: BorderSide.none,
                     ),
                   ),
+                  onChanged: (value) {
+                    _inputText = value.trim();
+                    updateSearchScreenState();
+                  },
                   onFieldSubmitted: (value) {
                     _saveSearchController = value;
                     _textController.text = value;
@@ -265,7 +290,7 @@ class _MainScreenState extends State<MainSearchBarScreen> {
                   if (loginStatus.loginStatus) {
                     // 로그인 후 로직
                   } else {
-                    Navigator.pushNamed(context, '/LoginPage');
+                    handleLogin();
                   }
                 },
                 child: const Icon(
@@ -294,7 +319,7 @@ class _MainScreenState extends State<MainSearchBarScreen> {
                   if (loginStatus.loginStatus) {
                     // 로그인 후 로직
                   } else {
-                    Navigator.pushNamed(context, '/LoginPage');
+                    handleLogin();
                   }
                 },
                 child: const Icon(

@@ -111,7 +111,6 @@ class _MainScreenState extends State<MainScreen> {
       searchDio = await popularSearches();
       searchScreenStatus.setPopularSearches(searchDio);
       _incrementFinishCount();
-      // 추천 검색어 불러오기
     }
   }
 
@@ -603,6 +602,21 @@ class _MainScreenState extends State<MainScreen> {
                                   ),
                                 ),
                               ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          right: 20,
+                          bottom: 70,
+                          child: FloatingActionButton(
+                            heroTag: "fab2",
+                            onPressed: _jumpToTop,
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.black,
+                            shape: const CircleBorder(),
+                            child: const Icon(
+                              Icons.arrow_upward,
+                              size: 32,
                             ),
                           ),
                         ),
