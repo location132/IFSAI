@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 class Searchbar extends StatefulWidget {
   final String textEditing;
-  const Searchbar({super.key, required this.textEditing});
+  final ValueChanged<String>? onChanged;
+
+  const Searchbar({super.key, required this.textEditing, this.onChanged});
 
   @override
   State<Searchbar> createState() => _SearchbarState();
@@ -10,6 +13,23 @@ class Searchbar extends StatefulWidget {
 
 class _SearchbarState extends State<Searchbar> {
   final TextEditingController _textEditingController = TextEditingController();
+  Timer? _debounce;
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    _textEditingController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged(String query) {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 120), () {
+      if (widget.onChanged != null) {
+        widget.onChanged!(query);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +56,6 @@ class _SearchbarState extends State<Searchbar> {
               ),
             ),
           ),
-          //hintText: '검색어를 입력해주세요.',
           hintText: widget.textEditing,
           hintStyle: const TextStyle(
             color: Color(0xffc1c1c1),
@@ -47,7 +66,7 @@ class _SearchbarState extends State<Searchbar> {
             borderSide: BorderSide.none,
           ),
         ),
-        // onFieldSubmitted: widget.onSearch,
+        onChanged: _onSearchChanged,
       ),
     );
   }

@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:my_dream/coreService/provider.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class LoginDialog extends StatefulWidget {
   const LoginDialog({super.key});
@@ -28,9 +27,21 @@ class _LoginDialogState extends State<LoginDialog> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      final emailStatus = Provider.of<LoginModel>(context, listen: false);
-      Navigator.pop(context);
-      emailStatus.setIstryEmailCode(true);
+      final loginStatus = Provider.of<LoginModel>(context, listen: false);
+      if (loginStatus.loginStatus) {
+        Navigator.of(context).pop();
+      }
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final loginStatus = Provider.of<LoginModel>(context);
+    if (loginStatus.loginStatus) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pop();
+      });
     }
   }
 

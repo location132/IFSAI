@@ -139,3 +139,40 @@ class SearchScreenModel with ChangeNotifier {
     notifyListeners();
   }
 }
+
+class PartnershipRequestModel with ChangeNotifier {
+  String? _selectedBusinessName;
+  String? _selectedBusinessAddress;
+  String? _selectedBusinessDetailAddress;
+  String? _selectedBusinessPhone;
+  double? _selectedLatitude;
+  double? _selectedLongitude;
+
+  String? get selectedBusinessName => _selectedBusinessName;
+  String? get selectedBusinessAddress => _selectedBusinessAddress;
+  String? get selectedBusinessDetailAddress => _selectedBusinessDetailAddress;
+  String? get selectedBusinessPhone => _selectedBusinessPhone;
+  double? get selectedLatitude => _selectedLatitude;
+  double? get selectedLongitude => _selectedLongitude;
+
+  void setSelectedBusiness(String name, String address, String detailAddress,
+      String phone, double latitude, double longitude) {
+    _selectedBusinessName = name;
+    _selectedBusinessAddress = address;
+    _selectedBusinessDetailAddress = detailAddress;
+    _selectedBusinessPhone = phone;
+    _selectedLatitude = latitude;
+    _selectedLongitude = longitude;
+    notifyListeners();
+  }
+
+  void clearSelectedBusiness() {
+    _selectedBusinessName = null;
+    _selectedBusinessAddress = null;
+    _selectedBusinessDetailAddress = null;
+    _selectedBusinessPhone = null;
+    _selectedLatitude = null;
+    _selectedLongitude = null;
+    notifyListeners();
+  }
+}

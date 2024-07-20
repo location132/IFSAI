@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_jailbreak_detection/flutter_jailbreak_detection.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart';
+import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'package:my_dream/Page/2_login_page/login_dio/login_dio.dart';
 import 'package:provider/provider.dart';
 import 'package:my_dream/coreService/provider.dart';
@@ -32,6 +33,8 @@ void main() async {
   // API URL 환경 변수 가져오기
   String apiUrl = dotenv.env['API_URL']!;
   KakaoSdk.init(nativeAppKey: dotenv.env['KAKAO_APP_KEY']!);
+  AuthRepository.initialize(appKey: dotenv.env['KAKAO_Javascript_KEY']!);
+
   String urlImg = '';
 
   bool isTokenValid = false;
@@ -53,6 +56,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => SearchBarModel()),
         ChangeNotifierProvider(create: (_) => SearchScreenModel()),
         ChangeNotifierProvider(create: (_) => SearchBarModel2()),
+        ChangeNotifierProvider(create: (_) => PartnershipRequestModel()),
       ],
       child: MyApp(isLoggedIn: isTokenValid, apiUrl: apiUrl, urlImg: urlImg),
     ),

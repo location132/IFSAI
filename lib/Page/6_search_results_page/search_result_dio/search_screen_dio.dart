@@ -22,7 +22,6 @@ Future<List<Map<String, dynamic>>> searchResultData(String keyword) async {
     var response = await dio.get(url, queryParameters: requestData);
 
     if (response.statusCode == 200) {
-      print(response.data);
       List<dynamic> market = response.data;
 
       for (var market in market) {
@@ -45,7 +44,6 @@ Future<List<Map<String, dynamic>>> searchResultData(String keyword) async {
       return [];
     }
   } catch (e) {
-    print(e);
     return [];
   }
 }

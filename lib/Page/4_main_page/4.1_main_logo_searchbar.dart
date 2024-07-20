@@ -129,16 +129,18 @@ class _MainScreenState extends State<MainSearchBarScreen> {
 
   // Dialog, 유저 미로그인상태, 로그인 필요한 페이지 접근 시도시 발생(noti, cart)
   void handleLogin() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      barrierColor: Colors.black.withOpacity(0.5),
-      builder: (BuildContext context) {
-        return LoginDialog();
-      },
-    );
+    final loginStatus = Provider.of<LoginModel>(context, listen: false);
+    if (!loginStatus.loginStatus) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        barrierColor: Colors.black.withOpacity(0.5),
+        builder: (BuildContext context) {
+          return const LoginDialog();
+        },
+      );
+    }
   }
-
 
   Future<void> getDioSearchValue() async {
     bool loginState =
